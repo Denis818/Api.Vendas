@@ -15,7 +15,7 @@ namespace Api.Vendas.Controllers
         private readonly IVendaRepository _vendaRepository;
         private readonly IMapper _mapper;
 
-        public VendaController(IVendaRepository vendaRepository, IMapper mapper, IProdutoRepository produtoRepository)
+        public VendaController(IVendaRepository vendaRepository, IMapper mapper)
         {
             _mapper = mapper;
             _vendaRepository = vendaRepository;
@@ -52,7 +52,6 @@ namespace Api.Vendas.Controllers
 
             _vendaRepository.Update(venda);
 
-            // Salve as alterações
             if (!await _vendaRepository.SaveChangesAsync())
                 return BadRequest("Ocorreu um erro ao tentar atualizar a venda.");
 

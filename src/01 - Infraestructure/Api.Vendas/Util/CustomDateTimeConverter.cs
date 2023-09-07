@@ -16,5 +16,4 @@ namespace Api.Vendas.Util
             writer.WriteStringValue(value.ToString("D"));
         }
     }
-
 }

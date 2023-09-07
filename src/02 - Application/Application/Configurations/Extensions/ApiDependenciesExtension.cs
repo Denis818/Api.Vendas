@@ -25,24 +25,17 @@ namespace Application.Configurations.Extensions
 
         public static void AddAuthenticationJwt(this IServiceCollection services, IConfiguration configuration)
         {
-            //JWT
-            //adiciona o manipulador de autenticacao e define o 
-            //esquema de autenticacao usado : Bearer
-            //valida o emissor, a audiencia e a chave
-            //usando a chave secreta valida a assinatura
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options =>
-                 options.TokenValidationParameters = new TokenValidationParameters
-                 {
-                     ValidateIssuer = true,
-                     ValidateAudience = true,
-                     ValidateLifetime = true,
-                     ValidAudience = configuration["TokenConfiguration:Audience"],
-                     ValidIssuer = configuration["TokenConfiguration:Issuer"],
-                     ValidateIssuerSigningKey = true,
-                     IssuerSigningKey = new SymmetricSecurityKey(
-                         Encoding.UTF8.GetBytes(configuration["Jwt:key"]))
-                 });
+                .AddJwtBearer(options => options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidAudience = configuration["TokenConfiguration:Audience"],
+                    ValidIssuer = configuration["TokenConfiguration:Issuer"],
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:key"]))
+                });
         }
 
         public static void AddAutoMapperConfig(this IServiceCollection services)

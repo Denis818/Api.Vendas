@@ -1,6 +1,5 @@
 using Application.Configurations.Extensions;
 using Data.Configurations.Extensions;
-using System.ComponentModel;
 using Api.Vendas.Util;
 
 var builder = WebApplication.CreateBuilder(args);
