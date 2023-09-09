@@ -1,11 +1,15 @@
-﻿using Domain.Models;
-using Domain.Models.Dto;
-
-namespace Domain.Dtos.Vendas
+﻿namespace Domain.Models.Dto
 {
     public class VendaDto
     {
-        public DateTime DataVenda { get; set; }
-        public List<ProdutoDto> Produtos { get; set; }
+        public string NomeProduto { get; set; }
+        public double Preco { get; set; }
+        public int QuantidadeVendido { get; set; }
+    }
+
+    public class VendaPorDiaDto
+    {
+        public DateTime Data { get; set; }
+        public double TotalVendas { get; set; }
     }
 }

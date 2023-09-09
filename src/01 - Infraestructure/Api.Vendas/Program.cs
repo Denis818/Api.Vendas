@@ -1,6 +1,6 @@
 using Application.Configurations.Extensions;
 using Data.Configurations.Extensions;
-using Api.Vendas.Util;
+using Api.Vendas.Converters;
 
 var builder = WebApplication.CreateBuilder(args);
 

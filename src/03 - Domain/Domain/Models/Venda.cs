@@ -3,14 +3,10 @@
     public class Venda
     {
         public int Id { get; set; }
+        public string NomeProduto { get; set; }
+        public double Preco { get; set; }
         public DateTime DataVenda { get; set; }
-        public List<Produto> Produtos { get; set; }
+        public int QuantidadeVendido { get; set; }
+        public double TotalDaVenda { get; set; }
     }
-
-    public class VendaPorDia
-    {
-        public DateTime Data { get; set; }
-        public double TotalVendas { get; set; }
-    }
-
 }

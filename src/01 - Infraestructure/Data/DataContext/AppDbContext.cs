@@ -11,7 +11,5 @@ namespace Data.DataContext.Context
         }
 
         public DbSet<Venda> Vendas { get; set; }
-        public DbSet<Produto> Produtos { get; set; }
-
     }
 }

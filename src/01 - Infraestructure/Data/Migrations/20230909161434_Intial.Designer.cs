@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230907163936_Initial")]
-    partial class Initial
+    [Migration("20230909161434_Intial")]
+    partial class Intial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,36 +25,6 @@ namespace Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Domain.Models.Produto", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("DataVenda")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Nome")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<double>("Preco")
-                        .HasColumnType("float");
-
-                    b.Property<int>("Quantidade")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("VendaId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("VendaId");
-
-                    b.ToTable("Produtos");
-                });
-
             modelBuilder.Entity("Domain.Models.Venda", b =>
                 {
                     b.Property<int>("Id")
@@ -65,6 +35,18 @@ namespace Data.Migrations
 
                     b.Property<DateTime>("DataVenda")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("NomeProduto")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("Preco")
+                        .HasColumnType("float");
+
+                    b.Property<int>("QuantidadeVendido")
+                        .HasColumnType("int");
+
+                    b.Property<double>("TotalDaVenda")
+                        .HasColumnType("float");
 
                     b.HasKey("Id");
 
@@ -269,13 +251,6 @@ namespace Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Domain.Models.Produto", b =>
-                {
-                    b.HasOne("Domain.Models.Venda", null)
-                        .WithMany("Produtos")
-                        .HasForeignKey("VendaId");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -325,11 +300,6 @@ namespace Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Domain.Models.Venda", b =>
-                {
-                    b.Navigation("Produtos");
                 });
 #pragma warning restore 612, 618
         }

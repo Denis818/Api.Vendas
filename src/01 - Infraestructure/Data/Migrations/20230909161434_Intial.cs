@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Data.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class Intial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -56,7 +56,11 @@ namespace Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    DataVenda = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    NomeProduto = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Preco = table.Column<double>(type: "float", nullable: false),
+                    DataVenda = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    QuantidadeVendido = table.Column<int>(type: "int", nullable: false),
+                    TotalDaVenda = table.Column<double>(type: "float", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -169,28 +173,6 @@ namespace Data.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "Produtos",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Nome = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Preco = table.Column<double>(type: "float", nullable: false),
-                    DataVenda = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Quantidade = table.Column<int>(type: "int", nullable: false),
-                    VendaId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Produtos", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Produtos_Vendas_VendaId",
-                        column: x => x.VendaId,
-                        principalTable: "Vendas",
-                        principalColumn: "Id");
-                });
-
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -229,11 +211,6 @@ namespace Data.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Produtos_VendaId",
-                table: "Produtos",
-                column: "VendaId");
         }
 
         /// <inheritdoc />
@@ -255,16 +232,13 @@ namespace Data.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Produtos");
+                name: "Vendas");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
-                name: "Vendas");
         }
     }
 }

@@ -1,10 +1,10 @@
 ﻿using Domain.Interfaces.Repository.Base;
 using Domain.Models;
+using Domain.Models.Dto;
 
 namespace Domain.Interfaces.Repository
 {
     public interface IVendaRepository : IRepositoryBase<Venda>
     {
-        Task<List<VendaPorDia>> GetVendasPorDia();
     }
 }

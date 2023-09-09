@@ -2,7 +2,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace Api.Vendas.Util
+namespace Api.Vendas.Converters
 {
     public class CustomDateTimeConverter : JsonConverter<DateTime>
     {
@@ -13,7 +13,7 @@ namespace Api.Vendas.Util
 
         public override void Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options)
         {
-            writer.WriteStringValue(value.ToString("D"));
+            writer.WriteStringValue(value.ToString("g"));
         }
     }
 }

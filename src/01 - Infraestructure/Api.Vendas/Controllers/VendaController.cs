@@ -1,8 +1,7 @@
 ﻿using AutoMapper;
-using Data.Repository;
-using Domain.Dtos.Vendas;
 using Domain.Interfaces.Repository;
 using Domain.Models;
+using Domain.Models.Dto;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -24,19 +23,24 @@ namespace Api.Vendas.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            return Ok(await _vendaRepository.Get().Include(p => p.Produtos).ToListAsync());
+            return Ok(await _vendaRepository.Get().ToListAsync());
         }
 
-        [HttpGet("vendas-por-dia")]
-        public async Task<IActionResult> GraficoVendasPorDia()
-        {
-            return Ok(await _vendaRepository.GetVendasPorDia());
-        }
+        /*  [HttpGet("vendas-por-dia")]
+          public async Task<IActionResult> GraficoVendasPorDia()
+          {
+              return Ok(await _vendaRepository.GetVendasPorDia());
+          }*/
 
         [HttpPost]
         public async Task<IActionResult> Post(VendaDto vendaDto)
         {
             var venda = _mapper.Map<Venda>(vendaDto);
+
+            venda.TotalDaVenda = venda.QuantidadeVendido * venda.Preco;
+
+            venda.DataVenda = DateTime.UtcNow.ToLocalTime();
+
             await _vendaRepository.InsertAsync(venda);
 
             if (!await _vendaRepository.SaveChangesAsync())
@@ -46,9 +50,18 @@ namespace Api.Vendas.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> Put(int id, Venda venda)
+        public async Task<IActionResult> Put(int id, VendaDto vendaDto)
         {
-            if (id != venda.Id) return BadRequest("Ids divergentes.");
+            var venda = await _vendaRepository.GetByIdAsync(id);
+
+            if (venda is null)
+            {
+                return BadRequest("Venda não encontrada.");
+            }
+
+            _mapper.Map(vendaDto, venda);
+
+            venda.TotalDaVenda = venda.QuantidadeVendido * venda.Preco;
 
             _vendaRepository.Update(venda);
 
