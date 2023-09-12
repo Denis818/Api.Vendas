@@ -13,7 +13,7 @@ namespace Api.Vendas.Converters
 
         public override void Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options)
         {
-            writer.WriteStringValue(value.ToString("g"));
+            writer.WriteStringValue(value.ToString("d"));
         }
     }
 }

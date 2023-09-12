@@ -1,6 +1,8 @@
 using Application.Configurations.Extensions;
 using Data.Configurations.Extensions;
 using Api.Vendas.Converters;
+using Application.Configurations;
+using ProEventos.API.Configuration.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,9 +27,15 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCorsPolicy();
+
 app.UseHttpsRedirection();
 
+app.UseRouting();
+
 app.UseAuthorization();
+
+app.UseMiddleware<MiddlewareException>();
 
 app.MapControllers();
 

@@ -3,7 +3,7 @@
     public class Venda
     {
         public int Id { get; set; }
-        public string NomeProduto { get; set; }
+        public string Nome { get; set; }
         public double Preco { get; set; }
         public DateTime DataVenda { get; set; }
         public int QuantidadeVendido { get; set; }

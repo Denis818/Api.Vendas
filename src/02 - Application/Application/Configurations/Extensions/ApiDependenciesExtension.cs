@@ -1,5 +1,10 @@
-﻿using Data.Repository;
+﻿using Application.Interfaces.Services;
+using Application.Interfaces.Utility;
+using Application.Services;
+using Application.Utilities;
+using Data.Repository;
 using Domain.Interfaces.Repository;
+using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,12 +20,15 @@ namespace Application.Configurations.Extensions
         {
             services.AddDependecyInjectinos();
             services.AddAuthenticationJwt(configuration);
-            services.AddAutoMapperConfig();
+            services.AddAutoConfigs();
         }
 
         public static void AddDependecyInjectinos(this IServiceCollection services)
         {
+            services.AddScoped<INotificador, Notificador>();
             services.AddScoped<IVendaRepository, VendaRepository>();
+            services.AddScoped<IVendasServices, VendasServices>();
+            //services.AddScoped<Pagination>();
         }
 
         public static void AddAuthenticationJwt(this IServiceCollection services, IConfiguration configuration)
@@ -38,7 +46,10 @@ namespace Application.Configurations.Extensions
                 });
         }
 
-        public static void AddAutoMapperConfig(this IServiceCollection services)
-          => services.AddAutoMapper(Assembly.GetExecutingAssembly());
+        public static void AddAutoConfigs(this IServiceCollection services)
+        {
+            services.AddAutoMapper(Assembly.GetExecutingAssembly());
+            services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+        }
     }
 }
