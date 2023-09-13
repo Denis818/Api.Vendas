@@ -195,7 +195,7 @@ namespace Application.Services
             {
                 string idsNotFound = $"{string.Join(", ", idsNaoEncontrados)}. Encontrados foram deletados";
 
-                Notificar(EnumTipoNotificacao.ClientError, ErrorMessages.NotFoundByIds + idsNotFound);
+                Notificar(EnumTipoNotificacao.Informacao, ErrorMessages.NotFoundByIds + idsNotFound);
             }
 
             _repository.DeleteRange(vendas);
