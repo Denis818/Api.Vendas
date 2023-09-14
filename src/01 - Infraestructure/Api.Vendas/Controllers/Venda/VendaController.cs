@@ -3,13 +3,15 @@ using Application.Interfaces.Services;
 using Domain.Dtos.Vendas;
 using Domain.Models;
 using Domain.Models.Dto;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ProEventos.API.Controllers.Base;
 
 namespace Api.Vendas.Controllers
 {
-    [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
+    [Route("api/[controller]")]
     public class VendaController : BaseApiController
     {
         private readonly IVendasServices _vendasServices;

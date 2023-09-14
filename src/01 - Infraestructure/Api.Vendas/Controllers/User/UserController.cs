@@ -1,22 +1,27 @@
-﻿using Domain.Dtos.User;
+﻿using Application.Utilities;
+using Domain.Dtos.User;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using ProEventos.API.Controllers.Base;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
 namespace Controllers.User
 {
-    [Route("[controller]")]
     [ApiController]
-    public class UserController : Controller
+    [Route("[controller]")]
+    public class UserController : BaseApiController
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly IConfiguration _configuration;
 
-        public UserController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, IConfiguration configuration = null)
+        public UserController(UserManager<IdentityUser> userManager, 
+            SignInManager<IdentityUser> signInManager, 
+            IConfiguration configuration,
+            IServiceProvider service) : base(service)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -24,7 +29,7 @@ namespace Controllers.User
         }
 
         [HttpPost("register")]
-        public async Task<ActionResult> ResisterUser([FromBody] UserDto userDto)
+        public async Task<UserTokenDto> ResisterUser(UserDto userDto)
         {
             var user = new IdentityUser
             {
@@ -37,28 +42,39 @@ namespace Controllers.User
 
             if (!userCreate.Succeeded)
             {
-                return BadRequest(userCreate.Errors);
+                foreach (var errorMessage in userCreate .Errors)
+                {
+                    Notificar(EnumTipoNotificacao.ClientError, errorMessage.Description);
+                }
+
+                Notificar(EnumTipoNotificacao.ClientError, "Falha ao registrar.");
+                return null;
             }
 
             await _signInManager.SignInAsync(user, false);
 
-            var token = GerarToken(userDto);
-
-            return Ok("Sucesso! seu Token: \n" + token.Token);
+            return GerarToken(userDto);
         }
-
-       
+    
         [HttpPost("login")]
-        public async Task<ActionResult> Login([FromBody] UserDto userDto)
+        public async Task<UserTokenDto> Login(UserDto userDto)
         {
             var userLogin = await _signInManager.PasswordSignInAsync(userDto.Email, userDto.Password, 
                 isPersistent: false, lockoutOnFailure: false);
 
             if (!userLogin.Succeeded)
-                return BadRequest("Login Inválido....");
+            {
+                Notificar(EnumTipoNotificacao.ClientError, "Login Inválido....");
+            }
 
-            return Ok(GerarToken(userDto));
+            return GerarToken(userDto);
         }
+
+        [HttpGet("logout")]
+        public async Task Logout() => await _signInManager.SignOutAsync();
+        
+        [HttpGet("name-user")]
+        public string NameUser() => HttpContext.User.Identity.Name;
 
         private UserTokenDto GerarToken(UserDto userDto)
         {

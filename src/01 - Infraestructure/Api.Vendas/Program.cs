@@ -3,6 +3,7 @@ using Data.Configurations.Extensions;
 using Api.Vendas.Converters;
 using Application.Configurations;
 using ProEventos.API.Configuration.Middleware;
+using Api.Vendas.Extensios;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +19,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddConectionsString(builder.Configuration);
 builder.Services.AddApiDependencyServices(builder.Configuration);
+builder.Services.AddSwaggerAuthorizationJWT(builder.Configuration);
 
 var app = builder.Build();
 
@@ -33,9 +35,11 @@ app.UseHttpsRedirection();
 
 app.UseRouting();
 
-app.UseAuthorization();
-
 app.UseMiddleware<MiddlewareException>();
+
+app.UseAuthentication();
+
+app.UseAuthorization();
 
 app.MapControllers();
 
