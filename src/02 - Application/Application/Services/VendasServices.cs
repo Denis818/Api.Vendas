@@ -88,8 +88,6 @@ namespace Application.Services
         {
             var allProducts = await _repository.Get().ToListAsync();
 
-            double totalDeTodasAsVendas = allProducts.Sum(v => v.TotalDaVenda);
-
             double mediaDeVendaPorDia = allProducts.GroupBy(p => p.DataVenda.Date)
                                                 .Average(g => g.Sum(p => p.QuantidadeVendido));
 
@@ -97,16 +95,29 @@ namespace Application.Services
                                                      .OrderByDescending(g => g.Sum(p => p.QuantidadeVendido))
                                                      .FirstOrDefault();
 
-            string produtoMaisVendido = produtoMaisVendidoGroup?.Key;
+            var produtosResumo = await _repository.Get().GroupBy(v => v.Nome)
+                                                  .Select(v => new ProdutoResumoDto
+                                                  {
+                                                      Nome = v.Key,
+                                                      TotalDaVenda = v.Sum(v => v.TotalDaVenda),
+                                                      QuantidadeTotalVendida = v.Sum(v => v.QuantidadeVendido)
+                                                  }).ToListAsync();
+
+            double totalDeTodasAsVendas = allProducts.Sum(v => v.TotalDaVenda);
 
             double? totalDoMaisVendido = produtoMaisVendidoGroup?.Sum(p => p.QuantidadeVendido * p.Preco);
 
+            string produtoMaisVendido = produtoMaisVendidoGroup?.Key;
+
             return new RemusoVendasDto
             {
+                ProdutosResumo = produtosResumo,
+                
                 MediaDeVendaPorDia = mediaDeVendaPorDia,
+                TotalDeTodasAsVendas = totalDeTodasAsVendas,
+                
                 ProdutoMaisVendido = produtoMaisVendido,
-                TotalDoMaisVendido = totalDoMaisVendido ?? 0,
-                TotalDeTodasAsVendas = totalDeTodasAsVendas
+                TotalDoMaisVendido = totalDoMaisVendido ?? 0
             };
         }
 

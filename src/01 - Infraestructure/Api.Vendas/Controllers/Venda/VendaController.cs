@@ -9,7 +9,7 @@ using ProEventos.API.Controllers.Base;
 
 namespace Api.Vendas.Controllers
 {
-    [Authorize]
+//    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class VendaController : BaseApiController
@@ -50,7 +50,7 @@ namespace Api.Vendas.Controllers
         [HttpGet("resumo-vendas")]
         public async Task<RemusoVendasDto> GetSalesSummaryAsync()
         {
-            return await _vendasServices.GetSalesSummaryAsync();
+           return await _vendasServices.GetSalesSummaryAsync();
         }
 
         [HttpGet("{id}")]
