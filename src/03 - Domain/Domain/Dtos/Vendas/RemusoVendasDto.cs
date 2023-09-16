@@ -4,9 +4,9 @@
     {
         public double MediaDeVendaPorDia { get; set; }
         public string ProdutoMaisVendido { get; set; }
-        public double TotalDoMaisVendido { get; set; }
+        public double TotalVendasHoje { get; set; }
         public double TotalDeTodasAsVendas { get; set; }
-        public List<ProdutoResumoDto> ProdutosResumo { get; set; }
+        public IList<ProdutoResumoDto> ProdutosResumo { get; set; }
     }
 
     public class ProdutoResumoDto

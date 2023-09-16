@@ -86,38 +86,52 @@ namespace Application.Services
 
         public async Task<RemusoVendasDto> GetSalesSummaryAsync()
         {
-            var allProducts = await _repository.Get().ToListAsync();
+            var hoje = DateTime.Now.Date;
+            var inicioDaSemana = hoje.AddDays(-(int)DateTime.Now.DayOfWeek);
+            var finalDaSemana = inicioDaSemana.AddDays(7);
 
-            double mediaDeVendaPorDia = allProducts.GroupBy(p => p.DataVenda.Date)
-                                                .Average(g => g.Sum(p => p.QuantidadeVendido));
+            // Carrega todos os dados necessários em uma única consulta
+            var allSales = await _repository.Get().ToListAsync();
 
-            var produtoMaisVendidoGroup = allProducts.GroupBy(p => p.Nome)
-                                                     .OrderByDescending(g => g.Sum(p => p.QuantidadeVendido))
-                                                     .FirstOrDefault();
+            // Processa os dados na memória
+            var produtoMaisVendidoDaSemana = allSales
+                .Where(p => p.DataVenda.Date >= inicioDaSemana && p.DataVenda.Date < finalDaSemana)
+                .GroupBy(p => p.Nome)
+                .Select(g => new
+                {
+                    Produto = g.Key,
+                    TotalVendas = g.Sum(p => p.QuantidadeVendido)
+                })
+                .OrderByDescending(p => p.TotalVendas)
+                .FirstOrDefault();
 
-            var produtosResumo = await _repository.Get().GroupBy(v => v.Nome)
-                                                  .Select(v => new ProdutoResumoDto
-                                                  {
-                                                      Nome = v.Key,
-                                                      TotalDaVenda = v.Sum(v => v.TotalDaVenda),
-                                                      QuantidadeTotalVendida = v.Sum(v => v.QuantidadeVendido)
-                                                  }).ToListAsync();
+            double mediaDeVendaPorDia = allSales
+                .GroupBy(p => p.DataVenda.Date)
+                .Average(g => g.Sum(p => p.QuantidadeVendido));
 
-            double totalDeTodasAsVendas = allProducts.Sum(v => v.TotalDaVenda);
+            double totalVendasHoje = allSales
+                .Where(v => v.DataVenda.Date == hoje)
+                .Sum(v => v.TotalDaVenda);
 
-            double? totalDoMaisVendido = produtoMaisVendidoGroup?.Sum(p => p.QuantidadeVendido * p.Preco);
+            var produtosResumo = allSales
+                .GroupBy(v => v.Nome)
+                .Select(v => new ProdutoResumoDto
+                {
+                    Nome = v.Key,
+                    TotalDaVenda = v.Sum(v => v.TotalDaVenda),
+                    QuantidadeTotalVendida = v.Sum(v => v.QuantidadeVendido)
+                })
+                .ToList();
 
-            string produtoMaisVendido = produtoMaisVendidoGroup?.Key;
+            var totalDeTodasAsVendas = allSales.Sum(v => v.TotalDaVenda);
 
             return new RemusoVendasDto
             {
                 ProdutosResumo = produtosResumo,
-                
+                TotalVendasHoje = totalVendasHoje,
                 MediaDeVendaPorDia = mediaDeVendaPorDia,
                 TotalDeTodasAsVendas = totalDeTodasAsVendas,
-                
-                ProdutoMaisVendido = produtoMaisVendido,
-                TotalDoMaisVendido = totalDoMaisVendido ?? 0
+                ProdutoMaisVendido = produtoMaisVendidoDaSemana?.Produto
             };
         }
 
