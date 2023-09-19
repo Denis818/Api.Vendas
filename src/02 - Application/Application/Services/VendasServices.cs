@@ -120,8 +120,7 @@ namespace Application.Services
                     Nome = v.Key,
                     TotalDaVenda = v.Sum(v => v.TotalDaVenda),
                     QuantidadeTotalVendida = v.Sum(v => v.QuantidadeVendido)
-                })
-                .ToList();
+                });
 
             var totalDeTodasAsVendas = allSales.Sum(v => v.TotalDaVenda);
 

@@ -6,7 +6,7 @@
         public string ProdutoMaisVendido { get; set; }
         public double TotalVendasHoje { get; set; }
         public double TotalDeTodasAsVendas { get; set; }
-        public IList<ProdutoResumoDto> ProdutosResumo { get; set; }
+        public IEnumerable<ProdutoResumoDto> ProdutosResumo { get; set; }
     }
 
     public class ProdutoResumoDto

@@ -29,6 +29,12 @@ namespace Api.Vendas.Controllers
             return await _vendasServices.GetAllVendasAsync(paginaAtual, itensPorPagina);
         }
 
+        [HttpGet("dia-atual")]
+        public List<Venda> GetSalesCurrentDay()
+        {
+            return _vendasServices.GetSalesByDate(DateTime.Now, DateTime.Now);
+        }
+
         [HttpGet("por-periodo")]
         public List<Venda> GetSalesByDate(DateTime? startDate, DateTime? endDate)
         {
