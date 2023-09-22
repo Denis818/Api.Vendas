@@ -1,6 +1,7 @@
 ﻿using Application.Interfaces.Utility;
 using Application.Utilities;
 using AutoMapper;
+using Domain.Interfaces.Repository;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
@@ -9,6 +10,7 @@ namespace ProEventos.API.Controllers.Base
     public abstract class BaseApiController : Controller
     {
         private readonly INotificador _notificador;
+
         public BaseApiController(IServiceProvider service)
         {
             _notificador = service.GetRequiredService<INotificador>();

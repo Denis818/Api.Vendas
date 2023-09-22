@@ -1,46 +1,17 @@
-using Application.Configurations.Extensions;
-using Data.Configurations.Extensions;
-using Api.Vendas.Converters;
-using Application.Configurations;
-using ProEventos.API.Configuration.Middleware;
-using Api.Vendas.Extensios;
-
-var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
-
-builder.Services.AddControllers().AddJsonOptions(options =>
+namespace Api.Vendas
 {
-    options.JsonSerializerOptions.Converters.Add(new CustomDateTimeConverter());
-}); 
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
+            CreateHostBuilder(args).Build().Run();
+        }
 
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-builder.Services.AddConectionsString(builder.Configuration);
-builder.Services.AddApiDependencyServices(builder.Configuration);
-builder.Services.AddSwaggerAuthorizationJWT(builder.Configuration);
-
-var app = builder.Build();
-
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>();
+                });
+    }
 }
-
-app.UseCorsPolicy();
-
-app.UseHttpsRedirection();
-
-app.UseRouting();
-
-app.UseMiddleware<MiddlewareException>();
-
-app.UseAuthentication();
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.Run();

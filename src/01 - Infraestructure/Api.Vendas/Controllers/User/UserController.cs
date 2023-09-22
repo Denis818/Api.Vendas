@@ -1,5 +1,6 @@
 ﻿using Application.Utilities;
 using Domain.Dtos.User;
+using Domain.Enumeradores;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -18,8 +19,8 @@ namespace Controllers.User
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly IConfiguration _configuration;
 
-        public UserController(UserManager<IdentityUser> userManager, 
-            SignInManager<IdentityUser> signInManager, 
+        public UserController(UserManager<IdentityUser> userManager,
+            SignInManager<IdentityUser> signInManager,
             IConfiguration configuration,
             IServiceProvider service) : base(service)
         {
@@ -42,7 +43,7 @@ namespace Controllers.User
 
             if (!userCreate.Succeeded)
             {
-                foreach (var errorMessage in userCreate .Errors)
+                foreach (var errorMessage in userCreate.Errors)
                 {
                     Notificar(EnumTipoNotificacao.ClientError, errorMessage.Description);
                 }
@@ -53,58 +54,69 @@ namespace Controllers.User
 
             await _signInManager.SignInAsync(user, false);
 
-            return GerarToken(userDto);
+            var claims = await _userManager.GetClaimsAsync(user);
+            return GerarToken(userDto, claims.ToArray());
         }
-    
+
         [HttpPost("login")]
         public async Task<UserTokenDto> Login(UserDto userDto)
         {
-            var userLogin = await _signInManager.PasswordSignInAsync(userDto.Email, userDto.Password, 
-                isPersistent: false, lockoutOnFailure: false);
+            var userLogin = await _signInManager.PasswordSignInAsync(userDto.Email, userDto.Password,
+                                                                     isPersistent: false, lockoutOnFailure: false);
+
+            var user = await _userManager.FindByEmailAsync(userDto.Email);
+            var claims = await _userManager.GetClaimsAsync(user);
 
             if (!userLogin.Succeeded)
             {
                 Notificar(EnumTipoNotificacao.ClientError, "Login Inválido....");
             }
 
-            return GerarToken(userDto);
+            return GerarToken(userDto, claims.ToArray());
         }
 
         [HttpGet("logout")]
         public async Task Logout() => await _signInManager.SignOutAsync();
-        
-        [HttpGet("name-user")]
-        public string NameUser() => HttpContext.User.Identity.Name;
 
-        private UserTokenDto GerarToken(UserDto userDto)
+        [HttpGet("info")]
+        public object UserInfo()
         {
-            //define declarações do usuario
-            var claims = new[]
-             {
-                 new Claim(JwtRegisteredClaimNames.UniqueName, userDto.Email),
-                 new Claim("meuPet", "pipoca"),
-                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-             };
+            bool isAdmin = HttpContext.User.Claims.Where(claim =>
+            int.TryParse(claim.Value, out int userPermission) &&
+            userPermission == (int)EnumPermissao.AcessoLog).Any();
 
-            //gerar uma chave com base em um algoritimo 
+            return new
+            {
+                UserEmail = HttpContext.User.Identity.Name,
+                IsAdmin = isAdmin
+            };
+        }
+
+        private UserTokenDto GerarToken(UserDto userDto, Claim[] permissoes)
+        {
+            var claims = new List<Claim>
+            {
+                new Claim(JwtRegisteredClaimNames.UniqueName, userDto.Email),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+            };
+
+            claims.AddRange(permissoes);
+
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:key"]));
 
-            //gerar a assinatura digital do token usando o algoritimo Hmac e a chave privada
             var credenciais = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-            //Tempo de expiracão do token.
-            var expiracao = _configuration["TokenConfiguration:ExpireHours"];
-            var expirationFormat = DateTime.UtcNow.AddHours(double.Parse(expiracao));
+            var expirationFormat = DateTime.UtcNow.AddHours(int.Parse(_configuration["TokenConfiguration:ExpireHours"]));
 
-            // classe que representa um token JWT e gera o token
-            JwtSecurityToken token = new JwtSecurityToken(
+            JwtSecurityToken token = new(
               issuer: _configuration["TokenConfiguration:Issuer"],
               audience: _configuration["TokenConfiguration:Audience"],
               claims: claims,
               expires: expirationFormat,
               signingCredentials: credenciais);
 
-            //retorna os dados com o token e informacoes
+            Notificar(EnumTipoNotificacao.Informacao, "Data de expiração no formato UTC.");
+
             return new UserTokenDto()
             {
                 Authenticated = true,

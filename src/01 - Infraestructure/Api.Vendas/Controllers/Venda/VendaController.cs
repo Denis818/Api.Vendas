@@ -1,16 +1,17 @@
-﻿using Api.Vendas.Utilities;
+﻿using Api.Vendas.Attributes;
+using Api.Vendas.Utilities;
 using Application.Interfaces.Services;
 using Domain.Dtos.Vendas;
+using Domain.Enumeradores;
 using Domain.Models;
 using Domain.Models.Dto;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ProEventos.API.Controllers.Base;
 
 namespace Api.Vendas.Controllers
 {
-//    [Authorize]
     [ApiController]
+    [Authorization]
     [Route("api/[controller]")]
     public class VendaController : BaseApiController
     {

@@ -1,9 +1,13 @@
 ﻿using Application.Interfaces.Utility;
 using Application.Utilities;
 using AutoMapper;
+using Domain.Interfaces.Repository;
 using Domain.Interfaces.Repository.Base;
+using Domain.Models;
+using Domain.Models.Dto;
 using FluentValidation;
 using FluentValidation.Results;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Application.Services.Base
@@ -12,10 +16,13 @@ namespace Application.Services.Base
       where TEntity : class, new()
       where TIRepository : class, IRepositoryBase<TEntity>
     {
-        protected readonly IMapper _mapper;
+        private readonly IMapper _mapper;
+        private readonly INotificador _notificador;
+        private readonly IValidator<TEntityDto> _validator;
+
         protected readonly TIRepository _repository;
-        protected readonly INotificador _notificador;
-        protected readonly IValidator<TEntityDto> _validator;
+        protected readonly ILogAcessoRepository _logAcesso;
+        protected readonly HttpContext _context;
 
         protected ServiceAppBase(IServiceProvider service)
         {
@@ -23,6 +30,8 @@ namespace Application.Services.Base
             _repository = service.GetRequiredService<TIRepository>();
             _notificador = service.GetRequiredService<INotificador>();
             _validator = service.GetRequiredService<IValidator<TEntityDto>>();
+            _logAcesso = service.GetRequiredService<ILogAcessoRepository>();
+            _context = service.GetRequiredService<IHttpContextAccessor>().HttpContext;
         }
 
         public void MapDtoToModel(TEntityDto entityDto, TEntity entity)
@@ -48,7 +57,8 @@ namespace Application.Services.Base
             {
                 var groupedFailures = results.Errors
                                              .GroupBy(failure => failure.PropertyName)
-                                             .Select(group => new {
+                                             .Select(group => new
+                                             {
                                                  PropertyName = group.Key,
                                                  Errors = string.Join(" ", group.Select(err => err.ErrorMessage))
                                              });
@@ -62,6 +72,26 @@ namespace Application.Services.Base
             }
 
             return false;
+        }
+
+
+        public async Task InsertLog(string userName, Venda venda, string acao)
+        {
+            var log = new LogAcesso
+            {
+                UserName = userName,
+                DataAcesso = venda.DataVenda,
+
+                VendaId = venda.Id,
+                NomeProduto = venda.Nome,
+                PrecoProduto = venda.Preco,
+                QuantidadeVendido = venda.QuantidadeVendido,
+
+                Acao = acao
+            };
+
+            await _logAcesso.InsertAsync(log);
+            await _logAcesso.SaveChangesAsync();
         }
     }
 }

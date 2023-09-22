@@ -1,9 +1,11 @@
-﻿using Application.Interfaces.Services;
+﻿using Application.Configurations.UserMain;
+using Application.Interfaces.Services;
 using Application.Interfaces.Utility;
 using Application.Services;
 using Application.Utilities;
 using Data.Repository;
 using Domain.Interfaces.Repository;
+using Domain.Interfaces.UserMain;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
@@ -25,10 +27,12 @@ namespace Application.Configurations.Extensions
 
         public static void AddDependecyInjectinos(this IServiceCollection services)
         {
+            services.AddHttpContextAccessor();
             services.AddScoped<INotificador, Notificador>();
             services.AddScoped<IVendaRepository, VendaRepository>();
+            services.AddScoped<ILogAcessoRepository, LogAcessoRepository>();
             services.AddScoped<IVendasServices, VendasServices>();
-            //services.AddScoped<Pagination>();
+            services.AddScoped<ISeedUser, SeedUser>();
         }
 
         public static void AddAuthenticationJwt(this IServiceCollection services, IConfiguration configuration)

@@ -11,5 +11,6 @@ namespace Data.DataContext.Context
         }
 
         public DbSet<Venda> Vendas { get; set; }
+        public DbSet<LogAcesso> LogAcessos { get; set; }
     }
 }

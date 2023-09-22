@@ -56,7 +56,7 @@ namespace Application.Services
 
         public async Task<List<Venda>> FilterSalesByName(string name)
         {
-            if (string.IsNullOrEmpty(name)) return new List<Venda>();
+            if (name.IsNullOrEmpty()) return await _repository.Get().ToListAsync();
 
             var lowerName = name.ToLower();
 
@@ -151,6 +151,8 @@ namespace Application.Services
                 Notificar(EnumTipoNotificacao.ServerError, ErrorMessages.InsertError);
                 return null;
             }
+
+            await InsertLog(_context.User.Identity.Name, venda, "Criação de Venda");
 
             return venda;
         }
