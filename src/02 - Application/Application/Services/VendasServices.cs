@@ -160,6 +160,14 @@ namespace Application.Services
         public async Task<Venda> UpdateAsync(int id, VendaDto vendaDto)
         {
             var venda = await _repository.GetByIdAsync(id);
+            var vendaAntiga = new Venda
+            {
+                Id = venda.Id,
+                Nome = venda.Nome,
+                Preco = venda.Preco,
+                QuantidadeVendido = venda.QuantidadeVendido,
+                DataVenda = venda.DataVenda,
+            };
 
             if (venda == null)
             {
@@ -181,6 +189,8 @@ namespace Application.Services
                 return null;
             }
 
+            await InsertLog(_context.User.Identity.Name, vendaAntiga, "Atualização de Venda");
+
             return venda;
         }
 
@@ -201,6 +211,8 @@ namespace Application.Services
                 Notificar(EnumTipoNotificacao.ServerError, ErrorMessages.DeleteError);
                 return;
             }
+
+            await InsertLog(_context.User.Identity.Name, venda, "Deleção de Venda");
 
             Notificar(EnumTipoNotificacao.Informacao, "Registro Deletado");
         }
@@ -230,6 +242,11 @@ namespace Application.Services
             {
                 Notificar(EnumTipoNotificacao.ServerError, ErrorMessages.DeleteError);
                 return;
+            }
+
+            foreach (var venda in vendas)
+            {
+                await InsertLog(_context.User.Identity.Name, venda, "Deleção de Venda");
             }
 
             Notificar(EnumTipoNotificacao.Informacao, "Registros Deletados");

@@ -39,5 +39,18 @@ namespace Api.Vendas.Controllers.Log
             return await _logAcesso.Get(venda => venda.UserName.ToLower()
                                     .Contains(lowerName)).ToListAsync();
         }
+
+        [HttpGet("{id}")]
+        public async Task<LogAcesso> GetById(int id)
+        {
+            var logAcesso = await _logAcesso.GetByIdAsync(id);
+
+            if(logAcesso is null)
+            {
+                return new LogAcesso();
+            }
+
+            return logAcesso;
+        }
     }
 }
