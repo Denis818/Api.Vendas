@@ -1,8 +1,8 @@
 ﻿using Api.Vendas.Extensios;
 using Application.Configurations;
 using Application.Configurations.Extensions;
+using Application.Configurations.UserMain;
 using Data.Configurations.Extensions;
-using Domain.Interfaces.UserMain;
 using ProEventos.API.Configuration.Middleware;
 
 namespace Api.Vendas
@@ -27,7 +27,7 @@ namespace Api.Vendas
             services.AddSwaggerAuthorizationJWT(Configuration);
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ISeedUser seedUser)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider services)
         {
             if (env.IsDevelopment())
             {
@@ -35,13 +35,13 @@ namespace Api.Vendas
                 app.UseSwaggerUI();
             }
 
-            seedUser.CreateSeedUser();
-
             app.UseCorsPolicy();
 
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            services.ConfigurarBancoDados();
 
             app.UseMiddleware<MiddlewareException>();
 

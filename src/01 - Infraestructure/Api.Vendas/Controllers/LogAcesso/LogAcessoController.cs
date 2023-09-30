@@ -12,8 +12,9 @@ using ProEventos.API.Controllers.Base;
 namespace Api.Vendas.Controllers.Log
 {
     [ApiController]
-    [Authorization]
+    [AuthorizationVendasWeb]
     [Route("api/[controller]")]
+    [PermissoesVendasWeb(EnumPermissoes.USU_000001)]
     public class LogAcessoController : BaseApiController
     {
         private readonly ILogAcessoRepository _logAcesso;
@@ -23,7 +24,6 @@ namespace Api.Vendas.Controllers.Log
         }
 
         [HttpGet]
-        [Permission(EnumPermissao.AcessoLog)]
         public async Task<PagedResult<LogAcesso>> Get(int paginaAtual = 1, int itensPorPagina = 10)
         {
             return await Pagination.PaginateResult(_logAcesso.Get(), paginaAtual, itensPorPagina);

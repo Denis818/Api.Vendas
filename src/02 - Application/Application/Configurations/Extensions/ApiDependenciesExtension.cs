@@ -1,11 +1,11 @@
-﻿using Application.Configurations.UserMain;
-using Application.Interfaces.Services;
+﻿using Application.Interfaces.Services;
+using Application.Interfaces.Services.Usuario;
 using Application.Interfaces.Utility;
 using Application.Services;
+using Application.Services.Usuario;
 using Application.Utilities;
 using Data.Repository;
 using Domain.Interfaces.Repository;
-using Domain.Interfaces.UserMain;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
@@ -32,7 +32,7 @@ namespace Application.Configurations.Extensions
             services.AddScoped<IVendaRepository, VendaRepository>();
             services.AddScoped<ILogAcessoRepository, LogAcessoRepository>();
             services.AddScoped<IVendasServices, VendasServices>();
-            services.AddScoped<ISeedUser, SeedUser>();
+            services.AddScoped<IUserService, UserService>();
         }
 
         public static void AddAuthenticationJwt(this IServiceCollection services, IConfiguration configuration)

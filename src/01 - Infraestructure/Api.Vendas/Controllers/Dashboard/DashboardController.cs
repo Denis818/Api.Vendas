@@ -8,7 +8,7 @@ using ProEventos.API.Controllers.Base;
 namespace Api.Vendas.Controllers.Dashboard
 {
     [ApiController]
-    [Authorization]
+    [AuthorizationVendasWeb]
     [Route("api/[controller]")]
     public class DashboardController : BaseApiController
     {

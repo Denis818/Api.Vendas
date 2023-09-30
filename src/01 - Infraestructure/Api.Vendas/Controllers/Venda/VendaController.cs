@@ -11,7 +11,7 @@ using ProEventos.API.Controllers.Base;
 namespace Api.Vendas.Controllers
 {
     [ApiController]
-    [Authorization]
+    [AuthorizationVendasWeb]
     [Route("api/[controller]")]
     public class VendaController : BaseApiController
     {

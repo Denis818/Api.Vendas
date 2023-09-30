@@ -4,16 +4,13 @@ using Application.Constants;
 using Application.Interfaces.Services;
 using Application.Services.Base;
 using Application.Utilities;
-using Data.Repository;
 using Domain.Dtos.Vendas;
 using Domain.Interfaces.Repository;
 using Domain.Models;
 using Domain.Models.Dto;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Globalization;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Application.Services
 {

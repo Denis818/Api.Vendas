@@ -1,4 +1,5 @@
-﻿using Application.Utilities;
+﻿using Application.Interfaces.Services.Usuario;
+using Application.Utilities;
 using Domain.Dtos.User;
 using Domain.Enumeradores;
 using Microsoft.AspNetCore.Identity;
@@ -18,15 +19,19 @@ namespace Controllers.User
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly IConfiguration _configuration;
+        private readonly IUserService _userService;
+
 
         public UserController(UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
             IConfiguration configuration,
-            IServiceProvider service) : base(service)
+            IServiceProvider service,
+            IUserService userService) : base(service)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _configuration = configuration;
+            _userService = userService;
         }
 
         [HttpPost("register")]
@@ -64,13 +69,14 @@ namespace Controllers.User
             var userLogin = await _signInManager.PasswordSignInAsync(userDto.Email, userDto.Password,
                                                                      isPersistent: false, lockoutOnFailure: false);
 
-            var user = await _userManager.FindByEmailAsync(userDto.Email);
-            var claims = await _userManager.GetClaimsAsync(user);
-
             if (!userLogin.Succeeded)
             {
                 Notificar(EnumTipoNotificacao.ClientError, "Login Inválido....");
+                return null;
             }
+
+            var user = await _userManager.FindByEmailAsync(userDto.Email);
+            var claims = await _userManager.GetClaimsAsync(user);
 
             return GerarToken(userDto, claims.ToArray());
         }
@@ -81,13 +87,11 @@ namespace Controllers.User
         [HttpGet("info")]
         public object UserInfo()
         {
-            bool isAdmin = HttpContext.User.Claims.Where(claim =>
-            int.TryParse(claim.Value, out int userPermission) &&
-            userPermission == (int)EnumPermissao.AcessoLog).Any();
+            bool isAdmin = _userService.PossuiPermissao();
 
             return new
             {
-                UserEmail = HttpContext.User.Identity.Name,
+                UserEmail = _userService.Name,
                 IsAdmin = isAdmin
             };
         }
