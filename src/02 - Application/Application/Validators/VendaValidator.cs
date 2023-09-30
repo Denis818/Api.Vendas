@@ -10,7 +10,7 @@ namespace Application.Validators
             RuleFor(x => x.Nome).NotEmpty().WithMessage("É obrigatório.")
                                 .Length(3, 15).WithMessage("Deve ter entre 3 a 15 caracteres.");
 
-            RuleFor(x => x.Preco).InclusiveBetween(0.1, 999)
+            RuleFor(x => x.Preco).InclusiveBetween(0.01, 999)
                                       .WithMessage("Não pode ser menor que 0.1, e maior que 999.");
 
             RuleFor(x => x.QuantidadeVendido).InclusiveBetween(1, 999)
