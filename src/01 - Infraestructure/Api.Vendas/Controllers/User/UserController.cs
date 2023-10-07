@@ -87,7 +87,7 @@ namespace Controllers.User
         [HttpGet("info")]
         public object UserInfo()
         {
-            bool isAdmin = _userService.PossuiPermissao();
+            bool isAdmin = _userService.PossuiPermissao(EnumPermissoes.USU_000001);
 
             return new
             {
