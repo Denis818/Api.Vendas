@@ -18,7 +18,8 @@ namespace Api.Vendas.Controllers.Log
     public class LogAcessoController : BaseApiController
     {
         private readonly ILogAcessoRepository _logAcesso;
-        public LogAcessoController(IServiceProvider service, ILogAcessoRepository logAcesso) : base(service)
+        public LogAcessoController(IServiceProvider service, 
+            ILogAcessoRepository logAcesso) : base(service)
         {
             _logAcesso = logAcesso;
         }

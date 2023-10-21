@@ -11,7 +11,10 @@ namespace Api.Vendas.Attributes
         {
             if (!context.HttpContext.User.Identity.IsAuthenticated)
             {
-                context.Result = new StatusCodeResult(401);
+                context.Result = new ObjectResult(new { Message = "Acesso não autorizado" })
+                {
+                    StatusCode = 401
+                };
                 return;
             }
         }
@@ -29,12 +32,12 @@ namespace Api.Vendas.Attributes
 
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            var possuiTodasPermissoes = _enumPermissoes.All(permissao => 
+            var possuiTodasPermissoes = _enumPermissoes.All(permissao =>
             context.HttpContext.User.Claims.Any(claim => claim.Value == permissao));
 
             if (!possuiTodasPermissoes)
             {
-                context.Result = new ObjectResult(new { Message = "Acesso não autorizado" })
+                context.Result = new ObjectResult(new { Message = "Você não tem permissão para acessar esse recurso." })
                 {
                     StatusCode = 401
                 };

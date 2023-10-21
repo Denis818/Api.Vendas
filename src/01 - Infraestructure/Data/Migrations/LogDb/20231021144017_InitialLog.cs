@@ -1,12 +1,12 @@
-﻿ using System;
+﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Data.Migrations
+namespace Data.Migrations.LogDb
 {
     /// <inheritdoc />
-    public partial class tableLog : Migration
+    public partial class InitialLog : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

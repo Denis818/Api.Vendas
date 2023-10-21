@@ -149,7 +149,7 @@ namespace Application.Services
                 return null;
             }
 
-            await InsertLog(_context.User.Identity.Name, venda, "Criação de Venda");
+            await InsertLog(_context.User.Identity.Name, venda, LogMessages.LogInsert);
 
             return venda;
         }
@@ -186,7 +186,7 @@ namespace Application.Services
                 return null;
             }
 
-            await InsertLog(_context.User.Identity.Name, vendaAntiga, "Atualização de Venda");
+            await InsertLog(_context.User.Identity.Name, vendaAntiga, LogMessages.LogUpdate);
 
             return venda;
         }
@@ -209,7 +209,7 @@ namespace Application.Services
                 return;
             }
 
-            await InsertLog(_context.User.Identity.Name, venda, "Deleção de Venda");
+            await InsertLog(_context.User.Identity.Name, venda, LogMessages.LogDelete);
 
             Notificar(EnumTipoNotificacao.Informacao, "Registro Deletado");
         }
@@ -243,7 +243,7 @@ namespace Application.Services
 
             foreach (var venda in vendas)
             {
-                await InsertLog(_context.User.Identity.Name, venda, "Deleção de Venda");
+                await InsertLog(_context.User.Identity.Name, venda, LogMessages.LogDelete);
             }
 
             Notificar(EnumTipoNotificacao.Informacao, "Registros Deletados");

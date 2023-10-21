@@ -12,7 +12,7 @@ namespace Application.Configurations.UserMain
         public static void ConfigurarBancoDados(this IServiceProvider services)
         {
             using var serviceScope = services.CreateScope();
-            var dbContext = serviceScope.ServiceProvider.GetRequiredService<AppDbContext>();
+            var dbContext = serviceScope.ServiceProvider.GetRequiredService<VendasDbContext>();
             dbContext.Database.Migrate();
 
             PrepararUsuarioInicial(serviceScope);

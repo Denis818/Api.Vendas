@@ -4,13 +4,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Data.DataContext.Context
 {
-    public partial class AppDbContext : IdentityDbContext
+    public partial class VendasDbContext : IdentityDbContext
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+        public VendasDbContext(DbContextOptions<VendasDbContext> options) : base(options)
         {
         }
 
         public DbSet<Venda> Vendas { get; set; }
-        public DbSet<LogAcesso> LogAcessos { get; set; }
     }
 }

@@ -2,19 +2,19 @@
 using Microsoft.Extensions.DependencyInjection;
 using System.Linq.Expressions;
 using Domain.Interfaces.Repository.Base;
-using Data.DataContext.Context;
 
 namespace Data.Repository.Base
 {
-    public abstract class RepositoryBase<TEntity> : IRepositoryBase<TEntity>
+    public abstract class RepositoryBase<TEntity, TContext> : IRepositoryBase<TEntity>
         where TEntity : class, new()
+        where TContext : DbContext
     {
-        private readonly AppDbContext _context;
+        private readonly TContext _context;
         private DbSet<TEntity> DbSet { get; }
 
         protected RepositoryBase(IServiceProvider service)
         {
-            _context = service.GetRequiredService<AppDbContext>();
+            _context = service.GetRequiredService<TContext>();
             DbSet = _context.Set<TEntity>();
         }
 
