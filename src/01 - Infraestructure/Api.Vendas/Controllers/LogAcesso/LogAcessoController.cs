@@ -6,11 +6,12 @@ using Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using NuGet.Protocol.Core.Types;
 using ProEventos.API.Controllers.Base;
+using Save.Cache.Memory;
 
 namespace Api.Vendas.Controllers.Log
 {
+    [Cached]
     [ApiController]
     [AuthorizationVendasWeb]
     [Route("api/[controller]")]

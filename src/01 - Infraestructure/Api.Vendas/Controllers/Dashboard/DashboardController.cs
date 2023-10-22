@@ -4,9 +4,11 @@ using Domain.Dtos.Vendas;
 using Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 using ProEventos.API.Controllers.Base;
+using Save.Cache.Memory;
 
 namespace Api.Vendas.Controllers.Dashboard
 {
+    [Cached]
     [ApiController]
     [AuthorizationVendasWeb]
     [Route("api/[controller]")]
@@ -20,11 +22,9 @@ namespace Api.Vendas.Controllers.Dashboard
         public List<Venda> GetSalesCurrentDay()
             => _vendasServices.GetSalesByDate(DateTime.Now, DateTime.Now);
 
-
         [HttpGet("vendas-por-dia")]
         public async Task<List<VendasPorDiaDto>> GetGroupSalesDayAsync()
             => await _vendasServices.GetGroupSalesDayAsync();
-
 
         [HttpGet("resumo-vendas")]
         public async Task<RemusoVendasDto> GetSalesSummaryAsync()

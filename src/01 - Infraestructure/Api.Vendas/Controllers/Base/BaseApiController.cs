@@ -1,7 +1,5 @@
 ﻿using Application.Interfaces.Utility;
 using Application.Utilities;
-using AutoMapper;
-using Domain.Interfaces.Repository;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 

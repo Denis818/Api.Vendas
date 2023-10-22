@@ -1,15 +1,15 @@
 ﻿using Api.Vendas.Attributes;
 using Api.Vendas.Utilities;
 using Application.Interfaces.Services;
-using Domain.Dtos.Vendas;
-using Domain.Enumeradores;
 using Domain.Models;
 using Domain.Models.Dto;
 using Microsoft.AspNetCore.Mvc;
 using ProEventos.API.Controllers.Base;
+using Save.Cache.Memory;
 
 namespace Api.Vendas.Controllers
 {
+    [Cached]
     [ApiController]
     [AuthorizationVendasWeb]
     [Route("api/[controller]")]
