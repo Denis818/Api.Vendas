@@ -1,4 +1,5 @@
 ﻿using Api.Vendas.Attributes;
+using Api.Vendas.Utilities;
 using Application.Interfaces.Services;
 using Domain.Dtos.Vendas;
 using Domain.Models;
@@ -19,8 +20,8 @@ namespace Api.Vendas.Controllers.Dashboard
             : base(service) => _vendasServices = vendasServices;
 
         [HttpGet("dia-atual")]
-        public List<Venda> GetSalesCurrentDay()
-            => _vendasServices.GetSalesByDate(DateTime.Now, DateTime.Now);
+        public async Task<PagedResult<Venda>> GetTodaysSalesDateAsync(int paginaAtual = 1, int itensPorPagina = 10)
+            => await _vendasServices.GetTodaysSalesDateAsync(paginaAtual, itensPorPagina);
 
         [HttpGet("vendas-por-dia")]
         public async Task<List<VendasPorDiaDto>> GetGroupSalesDayAsync()

@@ -38,12 +38,26 @@ namespace Application.Services
 
             if (endDate.HasValue)
             {
-                // Adiciona um dia à endDate para incluir vendas que ocorreram durante todo o dia final do intervalo
                 DateTime endOfDay = endDate.Value.Date.AddDays(1);
                 query = query.Where(v => v.DataVenda.Date < endOfDay.Date);
             }
 
             return query.ToList();
+        }
+
+        public async Task<PagedResult<Venda>> GetTodaysSalesDateAsync(int paginaAtual, int itensPorPagina)
+        {
+            var query = _repository.Get();
+
+            var startDate = DateTime.Now;
+            var endDate = DateTime.Now;
+
+            query = query.Where(v => v.DataVenda.Date >= startDate.Date);
+
+            DateTime endOfDay = endDate.Date.AddDays(1);
+            query = query.Where(v => v.DataVenda.Date < endOfDay.Date);
+
+            return await Pagination.PaginateResult(query, paginaAtual, itensPorPagina);
         }
 
         public async Task<Venda> GetByIdAsync(int id)

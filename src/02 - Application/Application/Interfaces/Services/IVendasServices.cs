@@ -11,6 +11,7 @@ namespace Application.Interfaces.Services
         Task<PagedResult<Venda>> GetAllVendasAsync(int paginaAtual, int itensPorPagina);
         Task<List<VendasPorDiaDto>> GetGroupSalesDayAsync();
         List<Venda> GetSalesByDate(DateTime? startDate, DateTime? endDate);
+        Task<PagedResult<Venda>> GetTodaysSalesDateAsync(int paginaAtual, int itensPorPagina);
         Task<RemusoVendasDto> GetSalesSummaryAsync();   
         Task<List<Venda>> FilterSalesByName(string name);
         Task<Venda> GetByIdAsync(int id);
