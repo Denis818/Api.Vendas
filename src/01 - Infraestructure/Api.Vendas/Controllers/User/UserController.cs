@@ -37,6 +37,13 @@ namespace Controllers.User
         [HttpPost("register")]
         public async Task<UserTokenDto> ResisterUser(UserDto userDto)
         {
+            var existingUser = await _userManager.FindByEmailAsync(userDto.Email);
+            if (existingUser != null)
+            {
+                Notificar(EnumTipoNotificacao.ClientError, "O e-mail já está registrado.");
+                return null;
+            }
+
             var user = new IdentityUser
             {
                 UserName = userDto.Email,
@@ -71,7 +78,7 @@ namespace Controllers.User
 
             if (!userLogin.Succeeded)
             {
-                Notificar(EnumTipoNotificacao.ClientError, "Login Inválido....");
+                Notificar(EnumTipoNotificacao.ClientError, "Email ou Senha incorretos.");
                 return null;
             }
 
