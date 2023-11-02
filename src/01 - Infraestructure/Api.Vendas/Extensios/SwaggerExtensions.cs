@@ -9,7 +9,7 @@ namespace Api.Vendas.Extensios
         {
             services.AddSwaggerGen(swagger =>
             {
-                swagger.SwaggerDoc("v1", new OpenApiInfo { Title = "ImobiliariaApi", Version = "v1" });
+                swagger.SwaggerDoc("v1", new OpenApiInfo { Title = "Vendas.Api", Version = "v1" });
 
                 var securitySchema = new OpenApiSecurityScheme
                 {
