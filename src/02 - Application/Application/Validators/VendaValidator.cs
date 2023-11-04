@@ -8,7 +8,7 @@ namespace Application.Validators
         public VendaValidator()
         {
             RuleFor(x => x.Nome).NotEmpty().WithMessage("É obrigatório.")
-                                .Length(3, 15).WithMessage("Deve ter entre 3 a 15 caracteres.");
+                                .Length(3, 25).WithMessage("Deve ter entre 3 a 15 caracteres.");
 
             RuleFor(x => x.Preco).InclusiveBetween(0.01, 999)
                                       .WithMessage("Não pode ser menor que 0.1, e maior que 999.");

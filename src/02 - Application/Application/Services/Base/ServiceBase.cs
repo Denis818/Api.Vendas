@@ -65,7 +65,7 @@ namespace Application.Services.Base
 
                 foreach (var failure in groupedFailures)
                 {
-                    Notificar(EnumTipoNotificacao.Informacao, $"{failure.PropertyName}: {failure.Errors}");
+                    Notificar(EnumTipoNotificacao.ClientError, $"{failure.PropertyName}: {failure.Errors}");
                 }
 
                 return true;
