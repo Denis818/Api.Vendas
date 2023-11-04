@@ -19,7 +19,8 @@ namespace Api.Vendas.Controllers.Log
     public class LogAcessoController : BaseApiController
     {
         private readonly ILogAcessoRepository _logAcesso;
-        public LogAcessoController(IServiceProvider service, 
+
+        public LogAcessoController(IServiceProvider service,
             ILogAcessoRepository logAcesso) : base(service)
         {
             _logAcesso = logAcesso;
@@ -27,8 +28,19 @@ namespace Api.Vendas.Controllers.Log
 
         [HttpGet]
         public async Task<PagedResult<LogAcesso>> Get(int paginaAtual = 1, int itensPorPagina = 10)
+            => await Pagination.PaginateResult(_logAcesso.Get(), paginaAtual, itensPorPagina);        
+
+        [HttpGet("{id}")]
+        public async Task<LogAcesso> GetById(int id)
         {
-            return await Pagination.PaginateResult(_logAcesso.Get(), paginaAtual, itensPorPagina);
+            var logAcesso = await _logAcesso.GetByIdAsync(id);
+
+            if (logAcesso is null)
+            {
+                return new LogAcesso();
+            }
+
+            return logAcesso;
         }
 
         [HttpGet("filter")]
@@ -40,19 +52,6 @@ namespace Api.Vendas.Controllers.Log
 
             return await _logAcesso.Get(venda => venda.UserName.ToLower()
                                     .Contains(lowerName)).ToListAsync();
-        }
-
-        [HttpGet("{id}")]
-        public async Task<LogAcesso> GetById(int id)
-        {
-            var logAcesso = await _logAcesso.GetByIdAsync(id);
-
-            if(logAcesso is null)
-            {
-                return new LogAcesso();
-            }
-
-            return logAcesso;
         }
     }
 }

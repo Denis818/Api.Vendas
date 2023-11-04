@@ -1,4 +1,5 @@
-﻿using Application.Interfaces.Services.Usuario;
+﻿using Api.Vendas.Utilities;
+using Application.Interfaces.Services.Usuario;
 using Application.Utilities;
 using Domain.Dtos.User;
 using Domain.Enumeradores;
@@ -102,6 +103,14 @@ namespace Controllers.User
                 IsAdmin = isAdmin
             };
         }
+
+        [HttpPost("addPermission")]
+        public async Task<string> AddPermissionToUser(string userEmail, string permisson)
+            => await _userService.AddPermissionToUser(userEmail, permisson);
+
+        [HttpPost("removePermission")]
+        public async Task<string> RemovePermissionFromUser(string userEmail, string permisson)
+            => await _userService.RemovePermissionFromUser(userEmail, permisson);
 
         private UserTokenDto GerarToken(UserDto userDto, Claim[] permissoes)
         {
