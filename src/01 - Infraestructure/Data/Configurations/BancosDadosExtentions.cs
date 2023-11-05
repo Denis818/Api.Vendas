@@ -1,4 +1,5 @@
-﻿using Data.DataContext.Context;
+﻿using Data.DataContext;
+using Data.DataContext.Context;
 using Domain.Enumeradores;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -12,8 +13,8 @@ namespace Application.Configurations.UserMain
         public static void ConfigurarBancoDados(this IServiceProvider services)
         {
             using var serviceScope = services.CreateScope();
-            var dbContext = serviceScope.ServiceProvider.GetRequiredService<VendasDbContext>();
-            dbContext.Database.Migrate();
+            serviceScope.ServiceProvider.GetRequiredService<VendasDbContext>().Database.Migrate();
+            serviceScope.ServiceProvider.GetRequiredService<LogDbContext>().Database.Migrate();
 
             PrepararUsuarioInicial(serviceScope);
         }
