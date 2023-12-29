@@ -17,11 +17,11 @@ namespace Data.Migrations.LogDb
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserName = table.Column<string>(type: "nvarchar(50)", nullable: true),
                     DataAcesso = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Acao = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Acao = table.Column<string>(type: "nvarchar(100)", nullable: true),
                     VendaId = table.Column<int>(type: "int", nullable: false),
-                    NomeProduto = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NomeProduto = table.Column<string>(type: "nvarchar(50)", nullable: true),
                     PrecoProduto = table.Column<double>(type: "float", nullable: false),
                     QuantidadeVendido = table.Column<int>(type: "int", nullable: false)
                 },
