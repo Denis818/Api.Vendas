@@ -8,9 +8,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Data.Repository
 {
-    public class LogAcessoRepository : RepositoryBase<LogAcesso, LogDbContext>, ILogAcessoRepository
+    public class LogVendaRepository : RepositoryBase<LogVenda, LogDbContext>, ILogVendaRepository
     {
-        public LogAcessoRepository(IServiceProvider service) : base(service)
+        public LogVendaRepository(IServiceProvider service) : base(service)
         {
         }
     }

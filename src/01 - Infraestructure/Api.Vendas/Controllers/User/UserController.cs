@@ -1,5 +1,5 @@
-﻿using Api.Vendas.Utilities;
-using Application.Interfaces.Services.Usuario;
+﻿using Api.Vendas.Extensios.Swagger.ExamplesSwagger.User;
+using Application.Interfaces.Services;
 using Application.Utilities;
 using Domain.Dtos.User;
 using Domain.Enumeradores;
@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using ProEventos.API.Controllers.Base;
+using Swashbuckle.AspNetCore.Filters;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -15,33 +16,25 @@ namespace Controllers.User
 {
     [ApiController]
     [Route("[controller]")]
-    public class UserController : BaseApiController
+    public class UserController(UserManager<IdentityUser> userManager,
+        SignInManager<IdentityUser> signInManager,
+        IConfiguration configuration,
+        IServiceProvider service,
+        IUserServices userService) : BaseApiController(service)
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly IConfiguration _configuration;
-        private readonly IUserService _userService;
-
-
-        public UserController(UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager,
-            IConfiguration configuration,
-            IServiceProvider service,
-            IUserService userService) : base(service)
-        {
-            _userManager = userManager;
-            _signInManager = signInManager;
-            _configuration = configuration;
-            _userService = userService;
-        }
+        private readonly UserManager<IdentityUser> _userManager = userManager;
+        private readonly SignInManager<IdentityUser> _signInManager = signInManager;
+        private readonly IConfiguration _configuration = configuration;
+        private readonly IUserServices _userService = userService;
 
         [HttpPost("register")]
+        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(UserTokenExample))]
         public async Task<UserTokenDto> ResisterUser(UserDto userDto)
         {
             var existingUser = await _userManager.FindByEmailAsync(userDto.Email);
             if (existingUser != null)
             {
-                Notificar(EnumTipoNotificacao.ClientError, "O e-mail já está registrado.");
+                Notificar("O e-mail já está registrado.", EnumTipoNotificacao.ClientError);
                 return null;
             }
 
@@ -58,10 +51,10 @@ namespace Controllers.User
             {
                 foreach (var errorMessage in userCreate.Errors)
                 {
-                    Notificar(EnumTipoNotificacao.ClientError, errorMessage.Description);
+                    Notificar(errorMessage.Description, EnumTipoNotificacao.ClientError);
                 }
 
-                Notificar(EnumTipoNotificacao.ClientError, "Falha ao registrar.");
+                Notificar("Falha ao registrar.", EnumTipoNotificacao.ClientError);
                 return null;
             }
 
@@ -72,6 +65,7 @@ namespace Controllers.User
         }
 
         [HttpPost("login")]
+        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(UserTokenExample))]
         public async Task<UserTokenDto> Login(UserDto userDto)
         {
             var userLogin = await _signInManager.PasswordSignInAsync(userDto.Email, userDto.Password,
@@ -79,7 +73,7 @@ namespace Controllers.User
 
             if (!userLogin.Succeeded)
             {
-                Notificar(EnumTipoNotificacao.ClientError, "Email ou Senha incorretos.");
+                Notificar("Email ou Senha incorretos.", EnumTipoNotificacao.ClientError);
                 return null;
             }
 
@@ -89,18 +83,16 @@ namespace Controllers.User
             return GerarToken(userDto, claims.ToArray());
         }
 
-        [HttpGet("logout")]
-        public async Task Logout() => await _signInManager.SignOutAsync();
-
         [HttpGet("info")]
-        public object UserInfo()
+        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(UserInfoExample))]
+        public UserInfoDto UserInfo()
         {
             bool isAdmin = _userService.PossuiPermissao(EnumPermissoes.USU_000001);
 
-            return new
+            return new()
             {
-                UserEmail = _userService.Name,
-                IsAdmin = isAdmin
+                Email = _userService.Name,
+                IsAdmin = isAdmin,
             };
         }
 
@@ -111,6 +103,9 @@ namespace Controllers.User
         [HttpPost("removePermission")]
         public async Task<string> RemovePermissionFromUser(string userEmail, string permisson)
             => await _userService.RemovePermissionFromUser(userEmail, permisson);
+
+        [HttpGet("logout")]
+        public async Task Logout() => await _signInManager.SignOutAsync();
 
         private UserTokenDto GerarToken(UserDto userDto, Claim[] permissoes)
         {
@@ -135,14 +130,13 @@ namespace Controllers.User
               expires: expirationFormat,
               signingCredentials: credenciais);
 
-            Notificar(EnumTipoNotificacao.Informacao, "Data de expiração no formato UTC.");
+            Notificar("Data de expiração no formato UTC.", EnumTipoNotificacao.Informacao);
 
             return new UserTokenDto()
             {
                 Authenticated = true,
                 Token = new JwtSecurityTokenHandler().WriteToken(token),
                 Expiration = expirationFormat,
-                Message = "Token JWT OK"
             };
         }
     }

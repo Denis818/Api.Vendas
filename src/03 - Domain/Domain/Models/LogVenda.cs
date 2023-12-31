@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace Domain.Models
 {
-    public class LogAcesso
+    public class LogVenda
     {
         public int Id { get; set; }
         public string UserName { get; set; }

@@ -21,7 +21,6 @@ namespace Application.Services.Base
         private readonly IValidator<TEntityDto> _validator;
 
         protected readonly TIRepository _repository;
-        protected readonly ILogAcessoRepository _logAcesso;
         protected readonly HttpContext _context;
 
         protected ServiceAppBase(IServiceProvider service)
@@ -30,7 +29,6 @@ namespace Application.Services.Base
             _repository = service.GetRequiredService<TIRepository>();
             _notificador = service.GetRequiredService<INotificador>();
             _validator = service.GetRequiredService<IValidator<TEntityDto>>();
-            _logAcesso = service.GetRequiredService<ILogAcessoRepository>();
             _context = service.GetRequiredService<IHttpContextAccessor>().HttpContext;
         }
 
@@ -47,7 +45,7 @@ namespace Application.Services.Base
             => _mapper.Map<IEnumerable<TEntityDto>>(entityDto);
 
         public void Notificar(EnumTipoNotificacao tipo, string message)
-            => _notificador.Add(new Notificacao(tipo, message));
+            => _notificador.Add(new Notificacao(message, tipo));
 
         public bool Validator(TEntityDto entityDto)
         {
@@ -72,26 +70,6 @@ namespace Application.Services.Base
             }
 
             return false;
-        }
-
-
-        public async Task InsertLog(string userName, Venda venda, string acao)
-        {
-            var log = new LogAcesso
-            {
-                UserName = userName,
-                DataAcesso = venda.DataVenda,
-
-                VendaId = venda.Id,
-                NomeProduto = venda.Nome,
-                PrecoProduto = venda.Preco,
-                QuantidadeVendido = venda.QuantidadeVendido,
-
-                Acao = acao
-            };
-
-            await _logAcesso.InsertAsync(log);
-            await _logAcesso.SaveChangesAsync();
         }
     }
 }

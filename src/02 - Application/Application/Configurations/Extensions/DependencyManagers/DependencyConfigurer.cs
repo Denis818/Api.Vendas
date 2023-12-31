@@ -1,38 +1,23 @@
-﻿using Application.Interfaces.Services;
-using Application.Interfaces.Services.Usuario;
-using Application.Interfaces.Utility;
-using Application.Services;
-using Application.Services.Usuario;
-using Application.Utilities;
-using Data.Repository;
-using Domain.Interfaces.Repository;
-using FluentValidation;
+﻿using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System.Reflection;
 using System.Text;
 
-namespace Application.Configurations.Extensions
+namespace Application.Configurations.Extensions.DependencyManagers
 {
-    public static class ApiDependenciesExtension
+    public static class DependencyConfigurer
     {
         public static void AddApiDependencyServices(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDependecyInjectinos();
+            services.AddDependecyRepositories();
+            services.AddDependecyServices();
+
             services.AddAuthenticationJwt(configuration);
             services.AddAutoConfigs();
-        }
-
-        public static void AddDependecyInjectinos(this IServiceCollection services)
-        {
-            services.AddHttpContextAccessor();
-            services.AddScoped<INotificador, Notificador>();
-            services.AddScoped<IVendaRepository, VendaRepository>();
-            services.AddScoped<ILogAcessoRepository, LogAcessoRepository>();
-            services.AddScoped<IVendasServices, VendasServices>();
-            services.AddScoped<IUserService, UserService>();
         }
 
         public static void AddAuthenticationJwt(this IServiceCollection services, IConfiguration configuration)
@@ -54,6 +39,14 @@ namespace Application.Configurations.Extensions
         {
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+        }
+
+        public static void UseCorsPolicy(this IApplicationBuilder app)
+        {
+            app.UseCors(builder =>
+                builder.AllowAnyOrigin()
+                       .AllowAnyMethod()
+                       .AllowAnyHeader());
         }
     }
 }

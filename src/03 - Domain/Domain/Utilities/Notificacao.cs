@@ -1,14 +1,9 @@
 ﻿namespace Application.Utilities
 {
-    public class Notificacao
+    public class Notificacao(string mensagem, EnumTipoNotificacao tipo = EnumTipoNotificacao.Informacao)
     {
-        public EnumTipoNotificacao StatusCode { get; set; } = EnumTipoNotificacao.Informacao;
-        public string Descricao { get; set; }
-        public Notificacao(EnumTipoNotificacao tipo, string mensagem)
-        {
-            StatusCode = tipo;
-            Descricao = mensagem;
-        }
+        public EnumTipoNotificacao StatusCode { get; set; } = tipo;
+        public string Descricao { get; set; } = mensagem;
     }
 
     public enum EnumTipoNotificacao

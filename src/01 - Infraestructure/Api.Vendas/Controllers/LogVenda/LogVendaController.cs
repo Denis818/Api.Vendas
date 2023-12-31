@@ -1,4 +1,5 @@
 ﻿using Api.Vendas.Attributes;
+using Api.Vendas.Extensios.Swagger.ExamplesSwagger.Log;
 using Api.Vendas.Utilities;
 using Domain.Enumeradores;
 using Domain.Interfaces.Repository;
@@ -8,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using ProEventos.API.Controllers.Base;
 using Save.Cache.Memory;
+using Swashbuckle.AspNetCore.Filters;
 
 namespace Api.Vendas.Controllers.Log
 {
@@ -16,35 +18,33 @@ namespace Api.Vendas.Controllers.Log
     [AuthorizationVendasWeb]
     [Route("api/[controller]")]
     [PermissoesVendasWeb(EnumPermissoes.USU_000001)]
-    public class LogAcessoController : BaseApiController
+    public class LogVendaController(IServiceProvider service,
+        ILogVendaRepository logAcesso) : BaseApiController(service)
     {
-        private readonly ILogAcessoRepository _logAcesso;
-
-        public LogAcessoController(IServiceProvider service,
-            ILogAcessoRepository logAcesso) : base(service)
-        {
-            _logAcesso = logAcesso;
-        }
+        private readonly ILogVendaRepository _logAcesso = logAcesso;
 
         [HttpGet]
-        public async Task<PagedResult<LogAcesso>> Get(int paginaAtual = 1, int itensPorPagina = 10)
+        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(PageLogVendaExample))]
+        public async Task<PagedResult<LogVenda>> Get(int paginaAtual = 1, int itensPorPagina = 10)
             => await Pagination.PaginateResult(_logAcesso.Get(), paginaAtual, itensPorPagina);        
 
         [HttpGet("{id}")]
-        public async Task<LogAcesso> GetById(int id)
+        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(LogVendaExample))]
+        public async Task<LogVenda> GetById(int id)
         {
             var logAcesso = await _logAcesso.GetByIdAsync(id);
 
             if (logAcesso is null)
             {
-                return new LogAcesso();
+                return new LogVenda();
             }
 
             return logAcesso;
         }
 
         [HttpGet("filter")]
-        public async Task<List<LogAcesso>> FilterUserName(string name)
+        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(ListLogVendaExample))]
+        public async Task<List<LogVenda>> FilterUserName(string name)
         {
             if (name.IsNullOrEmpty()) return await _logAcesso.Get().ToListAsync();
 

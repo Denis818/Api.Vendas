@@ -12,20 +12,20 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations.LogDb
 {
     [DbContext(typeof(LogDbContext))]
-    [Migration("20231021144017_InitialLog")]
-    partial class InitialLog
+    [Migration("20231231143907_UpdateLogVenda")]
+    partial class UpdateLogVenda
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.11")
+                .HasAnnotation("ProductVersion", "7.0.12")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Domain.Models.LogAcesso", b =>
+            modelBuilder.Entity("Domain.Models.LogVenda", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -56,7 +56,7 @@ namespace Data.Migrations.LogDb
 
                     b.HasKey("Id");
 
-                    b.ToTable("LogAcessos");
+                    b.ToTable("LogVendas");
                 });
 #pragma warning restore 612, 618
         }

@@ -28,30 +28,43 @@ namespace ProEventos.API.Controllers.Base
         {
             if (_notificador.ListNotificacoes.Count > 0)
             {
-                var erros = _notificador.ListNotificacoes.Where(item => item.StatusCode == EnumTipoNotificacao.ClientError);
-                if (erros.Any())
+                var ListErros = _notificador.ListNotificacoes.Where(item => item.StatusCode == EnumTipoNotificacao.ClientError);
+                if (ListErros.Any())
                 {
-                    var result = new ResponseResultDTO<TResponse>(default) { Mensagens = erros.ToArray() };
-                    return BadRequest(result);
+                    return BadRequest(new ResponseResultDTO<TResponse>(default)
+                    {
+                        Mensagens = ListErros.ToArray()
+                    });
                 }
 
-                var errosInternos = _notificador.ListNotificacoes.Where(item => item.StatusCode == EnumTipoNotificacao.ServerError);
-                if (errosInternos.Any())
+                var listErrosInternos = _notificador.ListNotificacoes.Where(item => item.StatusCode == EnumTipoNotificacao.ServerError);
+                if (listErrosInternos.Any())
                 {
-                    var result = new ResponseResultDTO<TResponse>(contentResponse) { Mensagens = errosInternos.ToArray() };
-                    return new ObjectResult(result) { StatusCode = 500 };
+                    return new ObjectResult(new ResponseResultDTO<TResponse>(contentResponse)
+                    {
+                        Mensagens = listErrosInternos.ToArray()
+
+                    }) { StatusCode = 500 };
                 }
-             
-                var informacoes = _notificador.ListNotificacoes.Where(item => item.StatusCode == EnumTipoNotificacao.Informacao);
-                if (informacoes.Any())
-                    return Ok(new ResponseResultDTO<TResponse>(contentResponse) { Mensagens = informacoes.ToArray() });
+
+                var listInformacoes = _notificador.ListNotificacoes.Where(item => item.StatusCode == EnumTipoNotificacao.Informacao);
+                if (listInformacoes.Any())
+                {
+                    return Ok(new ResponseResultDTO<TResponse>(contentResponse)
+                    {
+                        Mensagens = listInformacoes.ToArray()
+                    });
+                }
             }
 
-            return Ok(new ResponseResultDTO<TResponse>(contentResponse));
+            return Ok(new ResponseResultDTO<TResponse>(contentResponse)
+            {
+                Mensagens = [ new Notificacao("") ]
+            });
         }
 
-        protected void Notificar(EnumTipoNotificacao tipo, string mesage) 
-            => _notificador.Add(new Notificacao(tipo, mesage));
+        protected void Notificar(string mesage, EnumTipoNotificacao tipo)
+            => _notificador.Add(new Notificacao(mesage, tipo));
     }
 
     public class ResponseResultDTO<TResponse>

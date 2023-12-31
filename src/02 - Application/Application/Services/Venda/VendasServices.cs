@@ -14,11 +14,9 @@ using System.Globalization;
 
 namespace Application.Services
 {
-    public class VendasServices : ServiceAppBase<Venda, VendaDto, IVendaRepository>, IVendasServices
+    public class VendasServices(IServiceProvider service, ILogVendaServices logVenda) : ServiceAppBase<Venda, VendaDto, IVendaRepository>(service), IVendasServices
     {
-        public VendasServices(IServiceProvider service) : base(service)
-        {
-        }
+        private readonly ILogVendaServices _logVenda = logVenda;
 
         public async Task<PagedResult<Venda>> GetAllVendasAsync(int paginaAtual, int itensPorPagina)
         {
@@ -92,7 +90,7 @@ namespace Application.Services
                 .OrderBy(x => x.order)
                 .ToList();
 
-            return vendasPorDia.Select(x => new VendasPorDiaDto { Dia = x.dia, Total = x.total }).ToList();
+            return vendasPorDia.Select(x => new VendasPorDiaDto { Dia = x.dia, Total = Math.Round(x.total, 2) }).ToList();
         }
 
         public async Task<RemusoVendasDto> GetSalesSummaryAsync()
@@ -129,7 +127,7 @@ namespace Application.Services
                 .Select(v => new ProdutoResumoDto
                 {
                     Nome = v.Key,
-                    TotalDaVenda = v.Sum(v => v.TotalDaVenda),
+                    TotalDaVenda = Math.Round(v.Sum(v => v.TotalDaVenda), 2),
                     QuantidadeTotalVendida = v.Sum(v => v.QuantidadeVendido)
                 });
 
@@ -138,9 +136,9 @@ namespace Application.Services
             return new RemusoVendasDto
             {
                 ProdutosResumo = produtosResumo,
-                TotalVendasHoje = totalVendasHoje,
-                MediaDeVendaPorDia = mediaDeVendaPorDia,
-                TotalDeTodasAsVendas = totalDeTodasAsVendas,
+                TotalVendasHoje = Math.Round(totalVendasHoje, 2),
+                MediaDeVendaPorDia = Math.Round(mediaDeVendaPorDia, 2),
+                TotalDeTodasAsVendas = Math.Round(totalDeTodasAsVendas, 2),
                 ProdutoMaisVendido = produtoMaisVendidoDaSemana?.Produto
             };
         }
@@ -151,7 +149,7 @@ namespace Application.Services
 
             var venda = MapToModel(vendaDto);
 
-            venda.TotalDaVenda = venda.QuantidadeVendido * venda.Preco;
+            venda.TotalDaVenda = Math.Round(venda.QuantidadeVendido * venda.Preco, 2);
 
             venda.DataVenda = DateTime.Now;
 
@@ -163,14 +161,23 @@ namespace Application.Services
                 return null;
             }
 
-            await InsertLog(_context.User.Identity.Name, venda, LogMessages.LogInsert);
+            await _logVenda.InsertLog(_context.User.Identity.Name, venda, LogMessages.LogInsert);
 
             return venda;
         }
 
         public async Task<Venda> UpdateAsync(int id, VendaDto vendaDto)
         {
+            if (Validator(vendaDto)) return null;
+
             var venda = await _repository.GetByIdAsync(id);
+
+            if (venda == null)
+            {
+                Notificar(EnumTipoNotificacao.ClientError, ErrorMessages.NotFoundById + id);
+                return null;
+            }
+
             var vendaAntiga = new Venda
             {
                 Id = venda.Id,
@@ -180,17 +187,9 @@ namespace Application.Services
                 DataVenda = venda.DataVenda,
             };
 
-            if (venda == null)
-            {
-                Notificar(EnumTipoNotificacao.ClientError, ErrorMessages.NotFoundById + id);
-                return null;
-            }
-
-            if (Validator(vendaDto)) return null;
-
             MapDtoToModel(vendaDto, venda);
 
-            venda.TotalDaVenda = venda.QuantidadeVendido * venda.Preco;
+            venda.TotalDaVenda = Math.Round(venda.QuantidadeVendido * venda.Preco, 2);
 
             _repository.Update(venda);
 
@@ -200,7 +199,7 @@ namespace Application.Services
                 return null;
             }
 
-            await InsertLog(_context.User.Identity.Name, vendaAntiga, LogMessages.LogUpdate);
+            await _logVenda.InsertLog(_context.User.Identity.Name, vendaAntiga, LogMessages.LogUpdate);
 
             return venda;
         }
@@ -223,7 +222,7 @@ namespace Application.Services
                 return;
             }
 
-            await InsertLog(_context.User.Identity.Name, venda, LogMessages.LogDelete);
+            await _logVenda.InsertLog(_context.User.Identity.Name, venda, LogMessages.LogDelete);
 
             Notificar(EnumTipoNotificacao.Informacao, "Registro Deletado");
         }
@@ -257,7 +256,7 @@ namespace Application.Services
 
             foreach (var venda in vendas)
             {
-                await InsertLog(_context.User.Identity.Name, venda, LogMessages.LogDelete);
+                await _logVenda.InsertLog(_context.User.Identity.Name, venda, LogMessages.LogDelete);
             }
 
             Notificar(EnumTipoNotificacao.Informacao, "Registros Deletados");

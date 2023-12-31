@@ -1,20 +1,14 @@
-﻿using Api.Vendas.Extensios;
-using Application.Configurations;
-using Application.Configurations.Extensions;
+﻿using Api.Vendas.Extensios.Swagger;
+using Application.Configurations.Extensions.DependencyManagers;
 using Application.Configurations.UserMain;
 using Data.Configurations.Extensions;
 using ProEventos.API.Configuration.Middleware;
 
 namespace Api.Vendas
 {
-    public class Startup
+    public class Startup(IConfiguration configuration)
     {
-        public IConfiguration Configuration { get; }
-
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
+        public IConfiguration Configuration { get; } = configuration;
 
         public void ConfigureServices(IServiceCollection services)
         {
@@ -24,16 +18,13 @@ namespace Api.Vendas
 
             services.AddConectionsString(Configuration);
             services.AddApiDependencyServices(Configuration);
-            services.AddSwaggerAuthorizationJWT(Configuration);
+            services.AddSwaggerAuthorizationJWT();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider services)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
+            app.UseSwagger();
+            app.UseSwaggerUI();
 
             app.UseCorsPolicy();
 

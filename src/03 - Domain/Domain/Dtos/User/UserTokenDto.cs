@@ -10,6 +10,5 @@ namespace Domain.Dtos.User
         [JsonConverter(typeof(TimeFormatConverter))]
         public DateTime Expiration { get; set; }
         public string Token { get; set; }
-        public string Message { get; set; }
     }
 }

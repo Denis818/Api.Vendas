@@ -1,15 +1,21 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Filters;
+using System.Reflection;
 
-namespace Api.Vendas.Extensios
+namespace Api.Vendas.Extensios.Swagger
 {
     public static class SwaggerExtensions
     {
-        public static void AddSwaggerAuthorizationJWT(this IServiceCollection services, IConfiguration configuration)
+        public static void AddSwaggerAuthorizationJWT(this IServiceCollection services)
         {
+            services.AddSwaggerExamplesFromAssemblies(Assembly.GetExecutingAssembly());
+
             services.AddSwaggerGen(swagger =>
             {
                 swagger.SwaggerDoc("v1", new OpenApiInfo { Title = "Vendas.Api", Version = "v1" });
+
+                swagger.ExampleFilters();
 
                 var securitySchema = new OpenApiSecurityScheme
                 {

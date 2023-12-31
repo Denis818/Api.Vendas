@@ -3,12 +3,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Data.DataContext
 {
-    public class LogDbContext : DbContext
+    public class LogDbContext(DbContextOptions<LogDbContext> options) : DbContext(options)
     {
-        public LogDbContext(DbContextOptions<LogDbContext> options) : base(options)
-        {
-        }
-
-        public DbSet<LogAcesso> LogAcessos { get; set; }
+        public DbSet<LogVenda> LogVendas { get; set; }
     }
 }

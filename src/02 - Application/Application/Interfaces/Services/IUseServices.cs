@@ -2,9 +2,9 @@
 using Domain.Enumeradores;
 using Microsoft.AspNetCore.Identity;
 
-namespace Application.Interfaces.Services.Usuario
+namespace Application.Interfaces.Services
 {
-    public interface IUserService
+    public interface IUserServices
     {
         public string Name { get; }
 
