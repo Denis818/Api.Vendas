@@ -5,6 +5,7 @@ using Application.Utilities;
 using Domain.Enumeradores;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 
 namespace Application.Services.Usuario
@@ -35,6 +36,11 @@ namespace Application.Services.Usuario
 
         public async Task<string> AddPermissionToUser(string userEmail, string permisson)
         {
+            if (userEmail.IsNullOrEmpty() || permisson.IsNullOrEmpty())
+            {
+                Notificar("Email ou permissão não podem ser nullos", EnumTipoNotificacao.ClientError);
+                return null;
+            }
             var user = await _userManager.FindByEmailAsync(userEmail);
             if (user == null)
             {

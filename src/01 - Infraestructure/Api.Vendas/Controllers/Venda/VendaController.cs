@@ -24,7 +24,7 @@ namespace Api.Vendas.Controllers
         public async Task<PagedResult<Venda>> GetAllVendasAsync(int paginaAtual = 1, int itensPorPagina = 10)
             => await _vendasServices.GetAllVendasAsync(paginaAtual, itensPorPagina);
 
-        [HttpGet("filter")]
+        [HttpGet("filterByName")]
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(ListVendaExample))]
         public async Task<List<Venda>> FilterSalesByName(string name)
             => await _vendasServices.FilterSalesByName(name);

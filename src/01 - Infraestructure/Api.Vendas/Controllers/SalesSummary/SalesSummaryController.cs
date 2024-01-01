@@ -16,21 +16,21 @@ namespace Api.Vendas.Controllers.Dashboard
     [ApiController]
     [AuthorizationVendasWeb]
     [Route("api/[controller]")]
-    public class DashboardController(IServiceProvider service, IVendasServices vendasServices) : BaseApiController(service)
+    public class SalesSummaryController(IServiceProvider service, IVendasServices vendasServices) : BaseApiController(service)
     {
         private readonly IVendasServices _vendasServices = vendasServices;
 
-        [HttpGet("dia-atual")]
+        [HttpGet("vendas-do-dia-atual")]
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(PageVendaExample))]
         public async Task<PagedResult<Venda>> GetTodaysSalesDateAsync(int paginaAtual = 1, int itensPorPagina = 10)
             => await _vendasServices.GetTodaysSalesDateAsync(paginaAtual, itensPorPagina);
 
-        [HttpGet("vendas-por-dia")]
+        [HttpGet("vendas-agrupadas-por-dia")]
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(VendasPorDiaDtoExample))]
         public async Task<List<VendasPorDiaDto>> GetGroupSalesDayAsync()
             => await _vendasServices.GetGroupSalesDayAsync();
 
-        [HttpGet("resumo-vendas")]
+        [HttpGet("analise-completa-vendas")]
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(RemusoVendasDtoExample))]
         public async Task<RemusoVendasDto> GetSalesSummaryAsync()
             => await _vendasServices.GetSalesSummaryAsync();

@@ -42,13 +42,13 @@ namespace Api.Vendas.Controllers.Log
             return logAcesso;
         }
 
-        [HttpGet("filter")]
+        [HttpGet("filterByEmail")]
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(ListLogVendaExample))]
-        public async Task<List<LogVenda>> FilterUserName(string name)
+        public async Task<List<LogVenda>> FilterUserName(string email)
         {
-            if (name.IsNullOrEmpty()) return await _logAcesso.Get().ToListAsync();
+            if (email.IsNullOrEmpty()) return await _logAcesso.Get().ToListAsync();
 
-            var lowerName = name.ToLower();
+            var lowerName = email.ToLower();
 
             return await _logAcesso.Get(venda => venda.UserName.ToLower()
                                     .Contains(lowerName)).ToListAsync();

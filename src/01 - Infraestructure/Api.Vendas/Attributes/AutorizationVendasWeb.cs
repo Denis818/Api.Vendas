@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc;
 using Domain.Enumeradores;
+using Application.Utilities;
+using ProEventos.API.Controllers.Base;
 
 namespace Api.Vendas.Attributes
 {
@@ -11,36 +13,35 @@ namespace Api.Vendas.Attributes
         {
             if (!context.HttpContext.User.Identity.IsAuthenticated)
             {
-                context.Result = new ObjectResult(new { Message = "Acesso não autorizado" })
+                var response = new ResponseResultDTO<string>()
                 {
-                    StatusCode = 401
+                    Mensagens = [new Notificacao("Acesso não autorizado.")]
                 };
+
+                context.Result = new ObjectResult(response){ StatusCode = 401 };
                 return;
             }
         }
     }
 
     [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class)]
-    public class PermissoesVendasWeb : Attribute, IAuthorizationFilter
+    public class PermissoesVendasWeb(params EnumPermissoes[] enumPermissoes) : Attribute, IAuthorizationFilter
     {
-        private IEnumerable<string> _enumPermissoes { get; }
-
-        public PermissoesVendasWeb(params EnumPermissoes[] enumPermissoes)
-        {
-            _enumPermissoes = enumPermissoes.Select(x => x.ToString());
-        }
+        private IEnumerable<string> EnumPermissoes { get; } = enumPermissoes.Select(x => x.ToString());
 
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            var possuiTodasPermissoes = _enumPermissoes.All(permissao =>
+            var possuiTodasPermissoes = EnumPermissoes.All(permissao =>
             context.HttpContext.User.Claims.Any(claim => claim.Value == permissao));
 
             if (!possuiTodasPermissoes)
             {
-                context.Result = new ObjectResult(new { Message = "Você não tem permissão para acessar esse recurso." })
+                var response = new ResponseResultDTO<string>()
                 {
-                    StatusCode = 401
+                    Mensagens = [new Notificacao("Você não tem permissão para acessar esse recurso.")]
                 };
+
+                context.Result = new ObjectResult(response){ StatusCode = 401 };
                 return;
             }
         }

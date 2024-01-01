@@ -1,4 +1,5 @@
-﻿using Api.Vendas.Extensios.Swagger.ExamplesSwagger.User;
+﻿using Api.Vendas.Attributes;
+using Api.Vendas.Extensios.Swagger.ExamplesSwagger.User;
 using Application.Interfaces.Services;
 using Application.Utilities;
 using Domain.Dtos.User;
@@ -84,7 +85,7 @@ namespace Controllers.User
         }
 
         [HttpGet("info")]
-        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(UserInfoExample))]
+        [ApiExplorerSettings(IgnoreApi = true)]
         public UserInfoDto UserInfo()
         {
             bool isAdmin = _userService.PossuiPermissao(EnumPermissoes.USU_000001);
@@ -97,14 +98,19 @@ namespace Controllers.User
         }
 
         [HttpPost("addPermission")]
+        [ApiExplorerSettings(IgnoreApi = true)]
+        [PermissoesVendasWeb(EnumPermissoes.USU_000001)]
         public async Task<string> AddPermissionToUser(string userEmail, string permisson)
             => await _userService.AddPermissionToUser(userEmail, permisson);
 
         [HttpPost("removePermission")]
+        [ApiExplorerSettings(IgnoreApi = true)]
+        [PermissoesVendasWeb(EnumPermissoes.USU_000001)]
         public async Task<string> RemovePermissionFromUser(string userEmail, string permisson)
             => await _userService.RemovePermissionFromUser(userEmail, permisson);
 
         [HttpGet("logout")]
+        [ApiExplorerSettings(IgnoreApi = true)]
         public async Task Logout() => await _signInManager.SignOutAsync();
 
         private UserTokenDto GerarToken(UserDto userDto, Claim[] permissoes)
