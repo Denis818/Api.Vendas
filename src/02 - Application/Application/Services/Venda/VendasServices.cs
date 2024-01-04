@@ -28,17 +28,13 @@ namespace Application.Services
         public List<Venda> GetSalesByDate(DateTime? startDate, DateTime? endDate)
         {
             var query = _repository.Get();
+            startDate ??= DateTime.Now;
+            endDate ??= DateTime.Now;
 
-            if (startDate.HasValue)
-            {
-                query = query.Where(v => v.DataVenda.Date >= startDate.Value.Date);
-            }
+            query = query.Where(v => v.DataVenda.Date >= startDate.Value.Date);
 
-            if (endDate.HasValue)
-            {
-                DateTime endOfDay = endDate.Value.Date.AddDays(1);
-                query = query.Where(v => v.DataVenda.Date < endOfDay.Date);
-            }
+            DateTime endOfDay = endDate.Value.Date.AddDays(1);
+            query = query.Where(v => v.DataVenda.Date < endOfDay.Date);
 
             return query.ToList();
         }
