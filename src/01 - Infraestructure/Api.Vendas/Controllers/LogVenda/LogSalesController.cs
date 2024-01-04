@@ -42,7 +42,7 @@ namespace Api.Vendas.Controllers.Log
             return logAcesso;
         }
 
-        [HttpGet("filter-by-email")]
+        [HttpGet("by-email")]
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(ListLogVendaExample))]
         public async Task<List<LogVenda>> FilterUserName(string email)
         {

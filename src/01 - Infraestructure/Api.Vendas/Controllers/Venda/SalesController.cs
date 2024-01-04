@@ -24,12 +24,12 @@ namespace Api.Vendas.Controllers
         public async Task<PagedResult<Venda>> GetAllVendasAsync(int paginaAtual = 1, int itensPorPagina = 10)
             => await _vendasServices.GetAllVendasAsync(paginaAtual, itensPorPagina);
 
-        [HttpGet("filter-by-name")]
+        [HttpGet("by-name")]
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(ListVendaExample))]
         public async Task<List<Venda>> FilterSalesByName(string name)
             => await _vendasServices.FilterSalesByName(name);
 
-        [HttpGet("sales-by-period")]
+        [HttpGet("by-period")]
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(ListVendaExample))]
         public List<Venda> GetSalesByDate(DateTime? startDate, DateTime? endDate)
             => _vendasServices.GetSalesByDate(startDate, endDate);
