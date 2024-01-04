@@ -15,7 +15,7 @@ namespace Api.Vendas.Controllers
     [ApiController]
     [AuthorizationVendasWeb]
     [Route("api/[controller]")]
-    public class VendaController(IServiceProvider service, IVendasServices vendasServices) : BaseApiController(service)
+    public class SalesController(IServiceProvider service, IVendasServices vendasServices) : BaseApiController(service)
     {
         private readonly IVendasServices _vendasServices = vendasServices;
 
@@ -24,12 +24,12 @@ namespace Api.Vendas.Controllers
         public async Task<PagedResult<Venda>> GetAllVendasAsync(int paginaAtual = 1, int itensPorPagina = 10)
             => await _vendasServices.GetAllVendasAsync(paginaAtual, itensPorPagina);
 
-        [HttpGet("filterByName")]
+        [HttpGet("filter-by-name")]
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(ListVendaExample))]
         public async Task<List<Venda>> FilterSalesByName(string name)
             => await _vendasServices.FilterSalesByName(name);
 
-        [HttpGet("por-periodo")]
+        [HttpGet("sales-by-period")]
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(ListVendaExample))]
         public List<Venda> GetSalesByDate(DateTime? startDate, DateTime? endDate)
             => _vendasServices.GetSalesByDate(startDate, endDate);
@@ -54,7 +54,7 @@ namespace Api.Vendas.Controllers
         public async Task Delete(int id)
             => await _vendasServices.DeleteAsync(id);
 
-        [HttpDelete("DeleteRange")]
+        [HttpDelete("delete-range")]
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(DeleteVendaExample))]
         public async Task DeleteRanger(int[] ids)
             => await _vendasServices.DeleteRangerAsync(ids);

@@ -18,7 +18,7 @@ namespace Api.Vendas.Controllers.Log
     [AuthorizationVendasWeb]
     [Route("api/[controller]")]
     [PermissoesVendasWeb(EnumPermissoes.USU_000001)]
-    public class LogVendaController(IServiceProvider service,
+    public class LogSalesController(IServiceProvider service,
         ILogVendaRepository logAcesso) : BaseApiController(service)
     {
         private readonly ILogVendaRepository _logAcesso = logAcesso;
@@ -42,7 +42,7 @@ namespace Api.Vendas.Controllers.Log
             return logAcesso;
         }
 
-        [HttpGet("filterByEmail")]
+        [HttpGet("filter-by-email")]
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(ListLogVendaExample))]
         public async Task<List<LogVenda>> FilterUserName(string email)
         {

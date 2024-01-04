@@ -17,7 +17,7 @@ namespace Controllers.User
 {
     [ApiController]
     [Route("[controller]")]
-    public class UserController(UserManager<IdentityUser> userManager,
+    public class UsersController(UserManager<IdentityUser> userManager,
         SignInManager<IdentityUser> signInManager,
         IConfiguration configuration,
         IServiceProvider service,
