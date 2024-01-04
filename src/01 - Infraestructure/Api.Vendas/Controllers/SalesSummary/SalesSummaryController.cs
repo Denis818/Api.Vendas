@@ -20,6 +20,11 @@ namespace Api.Vendas.Controllers.Dashboard
     {
         private readonly IVendasServices _vendasServices = vendasServices;
 
+        [HttpGet]
+        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(RemusoVendasDtoExample))]
+        public async Task<RemusoVendasDto> GetSalesSummaryAsync()
+            => await _vendasServices.GetSalesSummaryAsync();
+
         [HttpGet("today")]
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(PageVendaExample))]
         public async Task<PagedResult<Venda>> GetTodaysSalesDateAsync(int paginaAtual = 1, int itensPorPagina = 10)
@@ -28,11 +33,6 @@ namespace Api.Vendas.Controllers.Dashboard
         [HttpGet("group-by-day")]
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(VendasPorDiaDtoExample))]
         public async Task<List<VendasPorDiaDto>> GetGroupSalesDayAsync()
-            => await _vendasServices.GetGroupSalesDayAsync();
-
-        [HttpGet("summary")]
-        [SwaggerResponseExample(StatusCodes.Status200OK, typeof(RemusoVendasDtoExample))]
-        public async Task<RemusoVendasDto> GetSalesSummaryAsync()
-            => await _vendasServices.GetSalesSummaryAsync();
+            => await _vendasServices.GetGroupSalesDayAsync();     
     }
 }
