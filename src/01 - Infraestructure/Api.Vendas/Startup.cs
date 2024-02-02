@@ -40,7 +40,15 @@ namespace Api.Vendas
 
             app.UseAuthorization();
 
-            app.UseEndpoints(opt => opt.MapControllers());
+            app.UseEndpoints(options =>
+            {
+                options.MapControllers();
+                options.MapGet("/{*path}", async context =>
+                {
+                    context.Response.Redirect("/swagger");
+                    await Task.CompletedTask;
+                });
+            });
         }
     }
 }

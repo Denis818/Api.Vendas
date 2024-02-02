@@ -28,9 +28,9 @@ namespace Application.Configurations.UserMain
             {
                 IdentityUser user = new()
                 {
-                    UserName = "teste@gmail.com",
+                    UserName = "denis@gmail.com",
                     Email = "denis@gmail.com",
-                    NormalizedUserName = "teste@gmail.COM",
+                    NormalizedUserName = "denis@gmail.com",
                     NormalizedEmail = "DENIS@GMAIL.COM",
                     EmailConfirmed = true,
                     LockoutEnabled = false,
