@@ -13,11 +13,23 @@ namespace Application.Configurations.UserMain
         public static void ConfigurarBancoDados(this IServiceProvider services)
         {
             using var serviceScope = services.CreateScope();
-            serviceScope.ServiceProvider.GetRequiredService<VendasDbContext>().Database.Migrate();
-            serviceScope.ServiceProvider.GetRequiredService<LogDbContext>().Database.Migrate();
+            var serviceProvider = serviceScope.ServiceProvider;
+
+            var vendasDbContext = serviceProvider.GetRequiredService<VendasDbContext>();
+            if (!vendasDbContext.Database.CanConnect()) // Verifica se é possível conectar ao banco de dados Vendas
+            {
+                vendasDbContext.Database.Migrate(); // Aplica as migrações se o banco de dados não existir
+            }
+
+            var logDbContext = serviceProvider.GetRequiredService<LogDbContext>();
+            if (!logDbContext.Database.CanConnect()) // Verifica se é possível conectar ao banco de dados Log
+            {
+                logDbContext.Database.Migrate(); // Aplica as migrações se o banco de dados não existir
+            }
 
             PrepararUsuarioInicial(serviceScope);
         }
+
 
         public static void PrepararUsuarioInicial(IServiceScope serviceScope)
         {

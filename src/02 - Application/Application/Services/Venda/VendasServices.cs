@@ -65,14 +65,17 @@ namespace Application.Services
 
             var lowerName = name.ToLower();
 
-            return await _repository.Get(venda => venda.Nome.ToLower()
-                                    .Contains(lowerName)).ToListAsync();
+            return await _repository.Get(venda => venda.Nome.Contains(lowerName, StringComparison.CurrentCultureIgnoreCase)).ToListAsync();
         }
 
         public async Task<List<VendasPorDiaDto>> GetGroupSalesDayAsync()
         {
             var allProducts = await _repository.Get().ToListAsync();
-
+            if (allProducts.Count < 1)
+            {
+                Notificar(EnumTipoNotificacao.Informacao, "Nunhuma venda encontrada.");
+                return null;
+            }
             var culture = new CultureInfo("pt-BR");
 
             var vendasPorDia = allProducts
@@ -97,6 +100,12 @@ namespace Application.Services
 
             // Carrega todos os dados necessários em uma única consulta
             var allSales = await _repository.Get().ToListAsync();
+
+            if (allSales.Count < 1)
+            {
+                Notificar(EnumTipoNotificacao.Informacao, "Nunhuma venda encontrada.");
+                return null;
+            }
 
             // Processa os dados na memória
             var produtoMaisVendidoDaSemana = allSales
