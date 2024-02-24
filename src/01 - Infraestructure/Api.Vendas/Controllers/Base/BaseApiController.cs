@@ -5,14 +5,9 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace ProEventos.API.Controllers.Base
 {
-    public abstract class BaseApiController : Controller
+    public abstract class BaseApiController(IServiceProvider service) : Controller
     {
-        private readonly INotificador _notificador;
-
-        public BaseApiController(IServiceProvider service)
-        {
-            _notificador = service.GetRequiredService<INotificador>();
-        }
+        private readonly INotificador _notificador = service.GetRequiredService<INotificador>();
 
         public override void OnActionExecuted(ActionExecutedContext context)
         {

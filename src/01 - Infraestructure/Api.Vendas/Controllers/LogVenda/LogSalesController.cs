@@ -1,6 +1,7 @@
 ﻿using Api.Vendas.Attributes;
 using Api.Vendas.Extensios.Swagger.ExamplesSwagger.Log;
 using Api.Vendas.Utilities;
+using Application.Utilities;
 using Domain.Enumeradores;
 using Domain.Interfaces.Repository;
 using Domain.Models;
@@ -18,15 +19,22 @@ namespace Api.Vendas.Controllers.Log
     [AuthorizationVendasWeb]
     [Route("api/[controller]")]
     [PermissoesVendasWeb(EnumPermissoes.USU_000001)]
-    public class LogSalesController(IServiceProvider service,
-        ILogVendaRepository logAcesso) : BaseApiController(service)
+    public class LogSalesController(IServiceProvider service, ILogVendaRepository logAcesso)
+        : BaseApiController(service)
     {
         private readonly ILogVendaRepository _logAcesso = logAcesso;
 
         [HttpGet]
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(PageLogVendaExample))]
         public async Task<PagedResult<LogVenda>> Get(int paginaAtual = 1, int itensPorPagina = 10)
-            => await Pagination.PaginateResult(_logAcesso.Get(), paginaAtual, itensPorPagina);        
+        {
+            var listLog = await Pagination.PaginateResult(_logAcesso.Get(), paginaAtual, itensPorPagina);
+
+            if (listLog.Itens.Count == 0) 
+                Notificar("Nenhum log encontrado.", EnumTipoNotificacao.Informacao);
+
+            return listLog;
+        }
 
         [HttpGet("{id}")]
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(LogVendaExample))]
@@ -36,6 +44,7 @@ namespace Api.Vendas.Controllers.Log
 
             if (logAcesso is null)
             {
+                Notificar("Nenhum log encontrado.", EnumTipoNotificacao.Informacao);
                 return new LogVenda();
             }
 
