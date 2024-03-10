@@ -11,7 +11,8 @@ namespace Api.Vendas
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>();
+                    webBuilder.UseStartup<Startup>()
+                     .UseUrls("http://0.0.0.0:3000");
                 });
     }
 }
