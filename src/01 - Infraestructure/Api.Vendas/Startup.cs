@@ -32,7 +32,7 @@ namespace Api.Vendas
 
             app.UseRouting();
 
-           // services.ConfigurarBancoDados();
+            services.ConfigurarBancoDados();
 
             app.UseMiddleware<MiddlewareException>();
 

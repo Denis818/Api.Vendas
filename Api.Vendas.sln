@@ -11,11 +11,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "02 - Application", "02 - Ap
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "03 - Domain", "03 - Domain", "{A4585735-5DD3-4D0F-8C42-559940CE1463}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data", "src\01 - Infraestructure\Data\Data.csproj", "{1D1BB106-8A55-42F9-82BE-A5887E55EC0A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Data", "src\01 - Infraestructure\Data\Data.csproj", "{1D1BB106-8A55-42F9-82BE-A5887E55EC0A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "src\02 - Application\Application\Application.csproj", "{024A621F-0131-4B96-AF86-44D7578C2AD4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application", "src\02 - Application\Application\Application.csproj", "{024A621F-0131-4B96-AF86-44D7578C2AD4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "src\03 - Domain\Domain\Domain.csproj", "{AAD868D3-D5CA-43F6-9872-0EEEB7A70D33}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "src\03 - Domain\Domain\Domain.csproj", "{AAD868D3-D5CA-43F6-9872-0EEEB7A70D33}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
