@@ -65,7 +65,8 @@ namespace Application.Services
 
             var lowerName = name.ToLower();
 
-            return await _repository.Get(venda => venda.Nome.Contains(lowerName, StringComparison.CurrentCultureIgnoreCase)).ToListAsync();
+            return await _repository.Get(venda => venda.Nome.ToLower()
+                                            .Contains(lowerName)).ToListAsync();
         }
 
         public async Task<List<VendasPorDiaDto>> GetGroupSalesDayAsync()
