@@ -14,18 +14,17 @@ namespace ProEventos.API.Configuration.Middleware
 
         public async Task Invoke(HttpContext httpContext)
         {
+            var log = httpContext.RequestServices.GetService<ILogApplicationRepository>();
+
             try
             {
                 await _next(httpContext);
 
-                var logDbContext = httpContext.RequestServices.GetService<LogDbContext>();
-
-                await LogRequestAsync(httpContext.Request, logDbContext);
+                await log.LogRequestAsync(httpContext.Request);
             }
             catch (Exception ex)
             {
-                var logDbContext = httpContext.RequestServices.GetService<LogDbContext>();
-                await LogErrorAsync(httpContext.Request, ex, logDbContext);
+                await log.LogErrorAsync(httpContext.Request, ex);
 
                 var message = $"Erro interno no servidor. {(_environmentHost.IsDevelopment() ? ex.Message : "")}";
 
@@ -40,33 +39,33 @@ namespace ProEventos.API.Configuration.Middleware
             }
         }
 
-        private async Task LogRequestAsync(HttpRequest request, LogDbContext logDbContext)
-        {
-            var logEntry = new LogRequest
-            {
-                Date = DateTime.UtcNow,
-                Method = request.Method,
-                Path = request.Path,
-                QueryString = request.QueryString.ToString()
-            };
+        //private async Task LogRequestAsync(HttpRequest request, LogDbContext logDbContext)
+        //{
+        //    var logEntry = new LogRequest
+        //    {
+        //        Date = DateTime.UtcNow,
+        //        Method = request.Method,
+        //        Path = request.Path,
+        //        QueryString = request.QueryString.ToString()
+        //    };
 
-            logDbContext.LogRequests.Add(logEntry);
-            await logDbContext.SaveChangesAsync();
-        }
+        //    logDbContext.LogRequests.Add(logEntry);
+        //    await logDbContext.SaveChangesAsync();
+        //}
 
-        private async Task LogErrorAsync(HttpRequest request, Exception exception, LogDbContext logDbContext)
-        {
-            var errorLogEntry = new LogError
-            {
-                Date = DateTime.UtcNow,
-                Method = request.Method,
-                Path = request.Path,
-                ExceptionMessage = exception.Message,
-                StackTrace = exception.StackTrace
-            };
+        //private async Task LogErrorAsync(HttpRequest request, Exception exception, LogDbContext logDbContext)
+        //{
+        //    var errorLogEntry = new LogError
+        //    {
+        //        Date = DateTime.UtcNow,
+        //        Method = request.Method,
+        //        Path = request.Path,
+        //        ExceptionMessage = exception.Message,
+        //        StackTrace = exception.StackTrace
+        //    };
 
-            logDbContext.LogErrors.Add(errorLogEntry);
-            await logDbContext.SaveChangesAsync();
-        }
+        //    logDbContext.LogErrors.Add(errorLogEntry);
+        //    await logDbContext.SaveChangesAsync();
+        //}
     }
 }
