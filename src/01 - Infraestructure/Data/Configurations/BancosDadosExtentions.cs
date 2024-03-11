@@ -1,5 +1,6 @@
 ﻿using Data.DataContext;
 using Data.DataContext.Context;
+using Domain.Converters;
 using Domain.Enumeradores;
 using Domain.Models;
 using Microsoft.AspNetCore.Identity;
@@ -17,6 +18,7 @@ namespace Application.Configurations.UserMain
             var serviceProvider = serviceScope.ServiceProvider;
 
             var vendasDbContext = serviceProvider.GetRequiredService<VendasDbContext>();
+
             if (!vendasDbContext.Database.CanConnect())
             {
                 vendasDbContext.Database.Migrate();
@@ -105,8 +107,8 @@ namespace Application.Configurations.UserMain
 
         private static DateTime RandomDay()
         {
-            var start = new DateTime(2024, 1, 1);
-            var end = new DateTime(2024, 3, 1);
+            var start = DateimeZoneProvider.GetBrasiliaTimeZone(new DateTime(2024, 1, 1));
+            var end = DateimeZoneProvider.GetBrasiliaTimeZone(new DateTime(2024, 3, 1));
             var random = new Random();
             int range = (end - start).Days;
             return start.AddDays(random.Next(range));

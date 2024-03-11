@@ -4,6 +4,7 @@ using Application.Constants;
 using Application.Interfaces.Services;
 using Application.Services.Base;
 using Application.Utilities;
+using Domain.Converters;
 using Domain.Dtos.Vendas;
 using Domain.Interfaces.Repository;
 using Domain.Models;
@@ -157,9 +158,7 @@ namespace Application.Services
 
             venda.TotalDaVenda = Math.Round(venda.QuantidadeVendido * venda.Preco, 2);
 
-            TimeZoneInfo brasiliaZone = TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time");
-            venda.DataVenda = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, brasiliaZone);
-
+            venda.DataVenda = DateimeZoneProvider.GetBrasiliaTimeZone(DateTime.UtcNow);
 
             await _repository.InsertAsync(venda);
 

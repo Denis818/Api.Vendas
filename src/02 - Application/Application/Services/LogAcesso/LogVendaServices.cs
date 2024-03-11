@@ -1,4 +1,5 @@
 ﻿using Application.Interfaces.Services;
+using Domain.Converters;
 using Domain.Interfaces.Repository;
 using Domain.Models;
 
@@ -13,7 +14,7 @@ namespace Application.Services.Log
             var log = new LogVenda
             {
                 UserName = userName,
-                DataAcesso = venda.DataVenda,
+                DataAcesso = DateimeZoneProvider.GetBrasiliaTimeZone(DateTime.UtcNow),
 
                 VendaId = venda.Id,
                 NomeProduto = venda.Nome,
