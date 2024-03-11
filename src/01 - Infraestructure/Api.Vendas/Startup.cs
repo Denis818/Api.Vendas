@@ -2,8 +2,9 @@
 using Application.Configurations.Extensions.DependencyManagers;
 using Application.Configurations.UserMain;
 using Data.Configurations.Extensions;
-using Domain.Converters;
+using Microsoft.AspNetCore.Localization;
 using ProEventos.API.Configuration.Middleware;
+using System.Globalization;
 
 namespace Api.Vendas
 {
@@ -13,11 +14,7 @@ namespace Api.Vendas
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers().AddJsonOptions(opt =>
-            {
-                opt.JsonSerializerOptions.Converters.Add(new DateFormatConverter());
-            });
-
+            services.AddControllers();
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
 
@@ -28,6 +25,13 @@ namespace Api.Vendas
 
         public void Configure(IApplicationBuilder app, IServiceProvider services)
         {
+            app.UseRequestLocalization(new RequestLocalizationOptions
+            {
+                DefaultRequestCulture = new RequestCulture("pt-BR"),
+                SupportedCultures = [new CultureInfo("pt-BR")],
+                SupportedUICultures = [new CultureInfo("pt-BR")]
+            });
+
             app.UseSwagger();
             app.UseSwaggerUI();
 
