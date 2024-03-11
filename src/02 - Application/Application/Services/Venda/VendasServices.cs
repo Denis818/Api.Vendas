@@ -157,7 +157,9 @@ namespace Application.Services
 
             venda.TotalDaVenda = Math.Round(venda.QuantidadeVendido * venda.Preco, 2);
 
-            venda.DataVenda = DateTime.Now;
+            TimeZoneInfo brasiliaZone = TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time");
+            venda.DataVenda = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, brasiliaZone);
+
 
             await _repository.InsertAsync(venda);
 
