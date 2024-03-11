@@ -7,7 +7,7 @@ namespace Domain.Converters
     {
         public override DateTime Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            return DateTime.Parse(reader.GetString());
+            return DateTime.ParseExact(reader.GetString(), "dd/MM/yyyy HH:mm", null);
         }
 
         public override void Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options)
