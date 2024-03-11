@@ -4,6 +4,7 @@ using Data.DataContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations.LogDb
 {
     [DbContext(typeof(LogDbContext))]
-    partial class LogDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240311170702_LogApplication")]
+    partial class LogApplication
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -45,6 +48,9 @@ namespace Data.Migrations.LogDb
                     b.Property<string>("StackTrace")
                         .HasColumnType("longtext");
 
+                    b.Property<string>("UserName")
+                        .HasColumnType("longtext");
+
                     b.HasKey("Id");
 
                     b.ToTable("LogErrors");
@@ -68,6 +74,9 @@ namespace Data.Migrations.LogDb
                         .HasColumnType("longtext");
 
                     b.Property<string>("QueryString")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("UserName")
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");

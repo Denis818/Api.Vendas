@@ -2,6 +2,7 @@
 using Application.Configurations.Extensions.DependencyManagers;
 using Application.Configurations.UserMain;
 using Data.Configurations.Extensions;
+using Domain.Interfaces.Repository;
 using Microsoft.AspNetCore.Localization;
 using ProEventos.API.Configuration.Middleware;
 using System.Globalization;

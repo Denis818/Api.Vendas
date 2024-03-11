@@ -19,6 +19,8 @@ namespace Application.Configurations.UserMain
 
             var vendasDbContext = serviceProvider.GetRequiredService<VendasDbContext>();
 
+          //  bool deletado = vendasDbContext.Database.EnsureDeleted();
+
             if (!vendasDbContext.Database.CanConnect())
             {
                 vendasDbContext.Database.Migrate();
@@ -26,6 +28,8 @@ namespace Application.Configurations.UserMain
             }
 
             var logDbContext = serviceProvider.GetRequiredService<LogDbContext>();
+          //  bool dseletado = logDbContext.Database.EnsureDeleted();
+
             if (!logDbContext.Database.CanConnect())
             {
                 logDbContext.Database.Migrate();
@@ -58,7 +62,8 @@ namespace Application.Configurations.UserMain
                 {
                     var listPermissoesPadroesAdmin = new[]
                     {
-                        EnumPermissoes.USU_000001
+                        EnumPermissoes.USU_000001,
+                        EnumPermissoes.USU_000002
                     };
 
                     var claims = listPermissoesPadroesAdmin.Select(p =>
