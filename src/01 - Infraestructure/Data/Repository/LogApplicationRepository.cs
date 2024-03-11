@@ -1,4 +1,5 @@
 ﻿using Data.DataContext;
+using Domain.Converters;
 using Domain.Interfaces.Repository;
 using Domain.Models;
 using Microsoft.AspNetCore.Http;
@@ -14,7 +15,7 @@ namespace Data.Repository
             var logEntry = new LogRequest
             {
 
-                Date = DateTime.UtcNow,
+                Date = DateimeZoneProvider.GetBrasiliaTimeZone(DateTime.UtcNow),
                 Method = request.Method,
                 Path = request.Path,
                 QueryString = request.QueryString.ToString(),
@@ -28,7 +29,7 @@ namespace Data.Repository
         {
             var errorLogEntry = new LogError
             {
-                Date = DateTime.UtcNow,
+                Date = DateimeZoneProvider.GetBrasiliaTimeZone(DateTime.UtcNow),
                 Method = request.Method,
                 Path = request.Path,
                 ExceptionMessage = exception.Message,

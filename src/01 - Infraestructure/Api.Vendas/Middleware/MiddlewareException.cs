@@ -14,17 +14,17 @@ namespace ProEventos.API.Configuration.Middleware
 
         public async Task Invoke(HttpContext httpContext)
         {
-            var log = httpContext.RequestServices.GetService<ILogApplicationRepository>();
-
             try
             {
                 await _next(httpContext);
 
-                await log.LogRequestAsync(httpContext.Request);
+                await httpContext.RequestServices.GetService<ILogApplicationRepository>()
+                    .LogRequestAsync(httpContext.Request);
             }
             catch (Exception ex)
             {
-                await log.LogErrorAsync(httpContext.Request, ex);
+                await httpContext.RequestServices.GetService<ILogApplicationRepository>()
+                    .LogErrorAsync(httpContext.Request, ex);
 
                 var message = $"Erro interno no servidor. {(_environmentHost.IsDevelopment() ? ex.Message : "")}";
 
