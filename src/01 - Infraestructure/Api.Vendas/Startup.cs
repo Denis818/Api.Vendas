@@ -21,7 +21,7 @@ namespace Api.Vendas
             services.AddSwaggerAuthorizationJWT();
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider services)
+        public void Configure(IApplicationBuilder app, IServiceProvider services)
         {
             app.UseSwagger();
             app.UseSwaggerUI();
