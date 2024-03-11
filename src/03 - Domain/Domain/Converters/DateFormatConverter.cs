@@ -8,7 +8,7 @@ namespace Domain.Converters
     {
         public override DateTime Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            return DateTime.ParseExact(reader.GetString(), "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture);
+            return DateTime.ParseExact(reader.GetString(), "dd/MM/yyyy HH:mm", new CultureInfo("pt-BR"));
         }
 
         public override void Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options)
