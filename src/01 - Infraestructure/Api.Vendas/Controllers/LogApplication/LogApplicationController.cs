@@ -2,19 +2,17 @@
 using Api.Vendas.Utilities;
 using Application.Interfaces.Services;
 using Domain.Enumeradores;
-using Domain.Interfaces.Repository;
 using Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 using ProEventos.API.Controllers.Base;
-using Save.Cache.Memory;
 
-namespace Api.Vendas.Controllers.Log
+namespace Api.Vendas.Controllers.LogApplication
 {
     [ApiController]
     [AuthorizationVendasWeb]
     [Route("api/[controller]")]
     [PermissoesVendasWeb(EnumPermissoes.USU_000002)]
-    public class LogController(IServiceProvider service, ILogApplicationServices logServices) : BaseApiController(service)
+    public class LogApplicationController(IServiceProvider service, ILogApplicationServices logServices) : BaseApiController(service)
     {
         private readonly ILogApplicationServices _logServices = logServices;
 
