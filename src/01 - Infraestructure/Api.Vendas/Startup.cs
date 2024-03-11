@@ -2,6 +2,7 @@
 using Application.Configurations.Extensions.DependencyManagers;
 using Application.Configurations.UserMain;
 using Data.Configurations.Extensions;
+using Domain.Converters;
 using ProEventos.API.Configuration.Middleware;
 
 namespace Api.Vendas
@@ -12,7 +13,11 @@ namespace Api.Vendas
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers().AddJsonOptions(opt =>
+            {
+                opt.JsonSerializerOptions.Converters.Add(new DateFormatConverter());
+            });
+
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
 
