@@ -1,6 +1,6 @@
 ﻿namespace Domain.Converters
 {
-    public class DateimeZoneProvider
+    public class DateTimeZoneProvider
     {
         public static DateTime GetBrasiliaTimeZone(DateTime dateTime)
             => TimeZoneInfo.ConvertTimeFromUtc(dateTime,

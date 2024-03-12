@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations.LogDb
 {
     [DbContext(typeof(LogDbContext))]
-    [Migration("20240311170702_LogApplication")]
-    partial class LogApplication
+    [Migration("20240312005336_InitialLog")]
+    partial class InitialLog
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -48,9 +48,6 @@ namespace Data.Migrations.LogDb
                     b.Property<string>("StackTrace")
                         .HasColumnType("longtext");
 
-                    b.Property<string>("UserName")
-                        .HasColumnType("longtext");
-
                     b.HasKey("Id");
 
                     b.ToTable("LogErrors");
@@ -63,6 +60,9 @@ namespace Data.Migrations.LogDb
                         .HasColumnType("int");
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Content")
+                        .HasColumnType("longtext");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime(6)");

@@ -1,7 +1,5 @@
 ﻿using Application.Utilities;
-using Data.DataContext;
 using Domain.Interfaces.Repository;
-using Domain.Models;
 using ProEventos.API.Controllers.Base;
 using System.Text.Json;
 
@@ -17,9 +15,6 @@ namespace ProEventos.API.Configuration.Middleware
             try
             {
                 await _next(httpContext);
-
-                await httpContext.RequestServices.GetService<ILogApplicationRepository>()
-                    .LogRequestAsync(httpContext.Request);
             }
             catch (Exception ex)
             {
@@ -38,34 +33,5 @@ namespace ProEventos.API.Configuration.Middleware
                 await httpContext.Response.WriteAsync(JsonSerializer.Serialize(response));
             }
         }
-
-        //private async Task LogRequestAsync(HttpRequest request, LogDbContext logDbContext)
-        //{
-        //    var logEntry = new LogRequest
-        //    {
-        //        Date = DateTime.UtcNow,
-        //        Method = request.Method,
-        //        Path = request.Path,
-        //        QueryString = request.QueryString.ToString()
-        //    };
-
-        //    logDbContext.LogRequests.Add(logEntry);
-        //    await logDbContext.SaveChangesAsync();
-        //}
-
-        //private async Task LogErrorAsync(HttpRequest request, Exception exception, LogDbContext logDbContext)
-        //{
-        //    var errorLogEntry = new LogError
-        //    {
-        //        Date = DateTime.UtcNow,
-        //        Method = request.Method,
-        //        Path = request.Path,
-        //        ExceptionMessage = exception.Message,
-        //        StackTrace = exception.StackTrace
-        //    };
-
-        //    logDbContext.LogErrors.Add(errorLogEntry);
-        //    await logDbContext.SaveChangesAsync();
-        //}
     }
 }

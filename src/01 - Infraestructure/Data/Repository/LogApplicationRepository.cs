@@ -10,26 +10,11 @@ namespace Data.Repository
     {
         private readonly LogDbContext _logDbContext = logDbContext;
 
-        public async Task LogRequestAsync(HttpRequest request)
-        {
-            var logEntry = new LogRequest
-            {
-
-                Date = DateimeZoneProvider.GetBrasiliaTimeZone(DateTime.UtcNow),
-                Method = request.Method,
-                Path = request.Path,
-                QueryString = request.QueryString.ToString(),
-            };
-
-            _logDbContext.LogRequests.Add(logEntry);
-            await _logDbContext.SaveChangesAsync();
-        }
-
         public async Task LogErrorAsync(HttpRequest request, Exception exception)
         {
             var errorLogEntry = new LogError
             {
-                Date = DateimeZoneProvider.GetBrasiliaTimeZone(DateTime.UtcNow),
+                Date = DateTimeZoneProvider.GetBrasiliaTimeZone(DateTime.UtcNow),
                 Method = request.Method,
                 Path = request.Path,
                 ExceptionMessage = exception.Message,

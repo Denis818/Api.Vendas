@@ -58,6 +58,9 @@ namespace Data.Migrations.LogDb
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Content")
+                        .HasColumnType("longtext");
+
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime(6)");
 
@@ -68,6 +71,9 @@ namespace Data.Migrations.LogDb
                         .HasColumnType("longtext");
 
                     b.Property<string>("QueryString")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("UserName")
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");

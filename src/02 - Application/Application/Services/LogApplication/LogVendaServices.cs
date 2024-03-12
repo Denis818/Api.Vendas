@@ -14,7 +14,7 @@ namespace Application.Services.Log
             var log = new LogVenda
             {
                 UserName = userName,
-                DataAcesso = DateimeZoneProvider.GetBrasiliaTimeZone(DateTime.UtcNow),
+                DataAcesso = DateTimeZoneProvider.GetBrasiliaTimeZone(DateTime.UtcNow),
 
                 VendaId = venda.Id,
                 NomeProduto = venda.Nome,

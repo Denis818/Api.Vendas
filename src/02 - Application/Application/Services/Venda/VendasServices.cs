@@ -158,7 +158,7 @@ namespace Application.Services
 
             venda.TotalDaVenda = Math.Round(venda.QuantidadeVendido * venda.Preco, 2);
 
-            venda.DataVenda = DateimeZoneProvider.GetBrasiliaTimeZone(DateTime.UtcNow);
+            venda.DataVenda = DateTimeZoneProvider.GetBrasiliaTimeZone(DateTime.UtcNow);
 
             await _repository.InsertAsync(venda);
 

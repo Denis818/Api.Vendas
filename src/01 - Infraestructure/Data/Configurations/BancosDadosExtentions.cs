@@ -112,8 +112,8 @@ namespace Application.Configurations.UserMain
 
         private static DateTime RandomDay()
         {
-            var start = DateimeZoneProvider.GetBrasiliaTimeZone(new DateTime(2024, 1, 1));
-            var end = DateimeZoneProvider.GetBrasiliaTimeZone(new DateTime(2024, 3, 1));
+            var start = DateTimeZoneProvider.GetBrasiliaTimeZone(new DateTime(2024, 1, 1));
+            var end = DateTimeZoneProvider.GetBrasiliaTimeZone(new DateTime(2024, 3, 1));
             var random = new Random();
             int range = (end - start).Days;
             return start.AddDays(random.Next(range));
