@@ -14,13 +14,14 @@ namespace Application.Services.Logs
         {
             var request = context.Request;
             string content = JsonSerializer.Serialize(objectResult.Value).ToString().Substring(0, 100);
+            var fullUrl = $"{request.Scheme}://{request.Host}{request.Path}";
 
             var logEntry = new LogApplication
             {
                 UserName = context.User.Identity.Name,
                 Date = DateTimeZoneProvider.GetBrasiliaTimeZone(DateTime.UtcNow),
                 Method = request.Method,
-                Path = request.Path,
+                Path = fullUrl,
                 QueryString = request.QueryString.ToString(),
                 Content = content,
                 TypeLog = TypeLog.Informacao.ToString(),
