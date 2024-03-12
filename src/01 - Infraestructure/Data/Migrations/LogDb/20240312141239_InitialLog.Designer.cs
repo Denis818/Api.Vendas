@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations.LogDb
 {
     [DbContext(typeof(LogDbContext))]
-    [Migration("20240312022247_InitialLog")]
+    [Migration("20240312141239_InitialLog")]
     partial class InitialLog
     {
         /// <inheritdoc />
@@ -36,11 +36,11 @@ namespace Data.Migrations.LogDb
                     b.Property<string>("Content")
                         .HasColumnType("longtext");
 
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime(6)");
-
                     b.Property<string>("ExceptionMessage")
                         .HasColumnType("longtext");
+
+                    b.Property<DateTime>("InclusionDate")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Method")
                         .HasColumnType("longtext");

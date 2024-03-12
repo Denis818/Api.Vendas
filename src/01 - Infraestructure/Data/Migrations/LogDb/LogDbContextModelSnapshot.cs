@@ -33,11 +33,11 @@ namespace Data.Migrations.LogDb
                     b.Property<string>("Content")
                         .HasColumnType("longtext");
 
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime(6)");
-
                     b.Property<string>("ExceptionMessage")
                         .HasColumnType("longtext");
+
+                    b.Property<DateTime>("InclusionDate")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Method")
                         .HasColumnType("longtext");

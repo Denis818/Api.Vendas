@@ -22,7 +22,7 @@ namespace ProEventos.API.Configuration.Middleware
             catch (Exception ex)
             {
                 await context.RequestServices.GetService<ILogApplicationServices>()
-                                             .InsertLogException(context, ex);
+                                             .RegisterLog(TypeLog.Exception, context, exception: ex);
 
                 var message = $"Erro interno no servidor. {(_environmentHost.IsDevelopment() ? ex.Message : "")}";
 

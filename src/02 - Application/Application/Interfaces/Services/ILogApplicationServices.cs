@@ -1,11 +1,12 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Domain.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Application.Interfaces.Services
 {
     public interface ILogApplicationServices
     {
-        Task InsertLogInformacao(HttpContext context, ObjectResult objectResult);
-        Task InsertLogException(HttpContext context, Exception ex);
+        Task RegisterLog(TypeLog typeLog, HttpContext context, 
+            ObjectResult objectResult = null, Exception exception = null);
     }
 }

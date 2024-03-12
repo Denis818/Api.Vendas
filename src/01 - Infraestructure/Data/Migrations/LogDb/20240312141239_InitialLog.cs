@@ -33,11 +33,11 @@ namespace Data.Migrations.LogDb
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     QueryString = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    InclusionDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     ExceptionMessage = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     StackTrace = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Date = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {

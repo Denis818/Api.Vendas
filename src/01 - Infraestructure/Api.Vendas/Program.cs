@@ -1,3 +1,6 @@
+using Serilog;
+using Serilog.Sinks.SystemConsole.Themes;
+
 namespace Api.Vendas
 {
     public class Program
@@ -9,6 +12,17 @@ namespace Api.Vendas
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                .UseSerilog((hosting, loggerConfiguration) =>
+                {
+                    loggerConfiguration
+                    .ReadFrom.Configuration(hosting.Configuration).Enrich.FromLogContext()
+                    .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm} {Level:u3}] {Message:lj}{NewLine}{Exception}\n",
+                     theme: AnsiConsoleTheme.Sixteen);
+                })
+                .ConfigureAppConfiguration((hosting, config) =>
+                {
+                    config.AddJsonFile($"appsettings.{hosting.HostingEnvironment.EnvironmentName}.json", optional: false, reloadOnChange: true);
+                })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     var port = Environment.GetEnvironmentVariable("PORT") ?? "3000";
