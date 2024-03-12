@@ -3,7 +3,7 @@ using Domain.Converters;
 using Domain.Interfaces.Repository;
 using Domain.Models;
 
-namespace Application.Services.Log
+namespace Application.Services.Logs
 {
     public class LogVendaServices(ILogVendaRepository logAcesso) : ILogVendaServices
     {

@@ -17,7 +17,7 @@ namespace Api.Vendas
         {
             services.AddControllers(options =>
             {
-               // options.Filters.Add(typeof(LogRequestFilter));
+                options.Filters.Add(typeof(LogRequestFilter));
             });
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();

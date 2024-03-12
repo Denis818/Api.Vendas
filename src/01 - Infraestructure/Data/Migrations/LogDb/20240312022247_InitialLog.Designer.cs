@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations.LogDb
 {
     [DbContext(typeof(LogDbContext))]
-    [Migration("20240312005336_InitialLog")]
+    [Migration("20240312022247_InitialLog")]
     partial class InitialLog
     {
         /// <inheritdoc />
@@ -25,35 +25,7 @@ namespace Data.Migrations.LogDb
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
-            modelBuilder.Entity("Domain.Models.LogError", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("ExceptionMessage")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Method")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Path")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("StackTrace")
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("LogErrors");
-                });
-
-            modelBuilder.Entity("Domain.Models.LogRequest", b =>
+            modelBuilder.Entity("Domain.Models.LogApplication", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -67,6 +39,9 @@ namespace Data.Migrations.LogDb
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<string>("ExceptionMessage")
+                        .HasColumnType("longtext");
+
                     b.Property<string>("Method")
                         .HasColumnType("longtext");
 
@@ -76,12 +51,18 @@ namespace Data.Migrations.LogDb
                     b.Property<string>("QueryString")
                         .HasColumnType("longtext");
 
+                    b.Property<string>("StackTrace")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("TypeLog")
+                        .HasColumnType("longtext");
+
                     b.Property<string>("UserName")
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
-                    b.ToTable("LogRequests");
+                    b.ToTable("LogsApplication");
                 });
 
             modelBuilder.Entity("Domain.Models.LogVenda", b =>

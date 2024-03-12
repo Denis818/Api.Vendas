@@ -5,8 +5,7 @@ namespace Domain.Interfaces.Repository
 {
     public interface ILogApplicationRepository
     {
-        Task LogErrorAsync(HttpRequest request, Exception exception);
-        IQueryable<LogRequest> GetLogRequest();
-        IQueryable<LogError> GetLogErrors();
+        Task InsertAsync(LogApplication log);
+        IQueryable<LogApplication> GetLogs();
     }
 }

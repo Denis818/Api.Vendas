@@ -12,7 +12,7 @@ using ProEventos.API.Controllers.Base;
 using Save.Cache.Memory;
 using Swashbuckle.AspNetCore.Filters;
 
-namespace Api.Vendas.Controllers.Log
+namespace Api.Vendas.Controllers.Logs
 {
     [ApiController]
     [AuthorizationVendasWeb]

@@ -1,12 +1,12 @@
 ﻿using Application.Interfaces.Services;
 using Application.Interfaces.Utility;
-using Application.Services.Log;
 using Application.Services.Usuario;
 using Application.Services;
 using Application.Utilities;
 using Data.Repository;
 using Domain.Interfaces.Repository;
 using Microsoft.Extensions.DependencyInjection;
+using Application.Services.Logs;
 
 namespace Application.Configurations.Extensions.DependencyManagers
 {

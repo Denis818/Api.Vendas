@@ -1,11 +1,11 @@
-﻿using Api.Vendas.Utilities;
-using Domain.Models;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Application.Interfaces.Services
 {
     public interface ILogApplicationServices
     {
-        Task<PagedResult<LogError>> GetLogErrors(int paginaAtual, int itensPorPagina);
-        Task<PagedResult<LogRequest>> GetLogRequests(int paginaAtual, int itensPorPagina);
+        Task InsertLogInformacao(HttpContext context, ObjectResult objectResult);
+        Task InsertLogException(HttpContext context, Exception ex);
     }
 }
