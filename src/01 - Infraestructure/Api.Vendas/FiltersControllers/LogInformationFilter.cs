@@ -4,7 +4,7 @@ using Application.Interfaces.Services;
 
 namespace Api.Vendas.FiltersControllers
 {
-    public class LogRequestFilter(ILogApplicationServices LogService) : IAsyncResultFilter
+    public class LogInformationFilter(ILogApplicationServices LogService) : IAsyncResultFilter
     {
         public async Task OnResultExecutionAsync(ResultExecutingContext context, ResultExecutionDelegate next)
         {
