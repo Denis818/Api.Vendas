@@ -16,7 +16,7 @@ using System.Text;
 namespace Controllers.User
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class UsersController(UserManager<IdentityUser> userManager,
         SignInManager<IdentityUser> signInManager,
         IConfiguration configuration,
