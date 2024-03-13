@@ -16,33 +16,33 @@ namespace Application.Services.Logs
             ObjectResult objectResult, 
             Exception ex)
         {
-            //var request = context.Request;
-            //string method = $"{request.Method} StatusCode - {context.Response.StatusCode}";
-            //string fullUrl = $"{request.Scheme}://{request.Host}{request.Path}";
+            var request = context.Request;
+            string method = $"{request.Method} - StatusCode {context.Response.StatusCode}";
+            string fullUrl = $"{request.Scheme}://{request.Host}{request.Path}";
 
-            //string content = objectResult is null ? "" : JsonSerializer.Serialize(objectResult.Value)[..100];
+            string content = objectResult is null ? "" : JsonSerializer.Serialize(objectResult.Value)[..100];
 
-            //var logEntry = new LogApplication
-            //{
-            //    UserName = context.User.Identity.Name,
-            //    TypeLog = typeLog.ToString(),
-            //    Content = content,
-            //    InclusionDate = DateTimeZoneProvider.GetBrasiliaTimeZone(DateTime.UtcNow),
-            //    Method = method,
-            //    Path = fullUrl,
-            //    QueryString = request.QueryString.ToString(),
-            //    StackTrace = "",
-            //    ExceptionMessage = ""
+            var logEntry = new LogApplication
+            {
+                UserName = context.User.Identity.Name,
+                TypeLog = typeLog.ToString(),
+                Content = content,
+                InclusionDate = DateTimeZoneProvider.GetBrasiliaTimeZone(DateTime.UtcNow),
+                Method = method,
+                Path = fullUrl,
+                QueryString = request.QueryString.ToString(),
+                StackTrace = "",
+                ExceptionMessage = ""
 
-            //};
+            };
 
-            //if (typeLog is TypeLog.Exception)
-            //{
-            //    logEntry.StackTrace = ex.StackTrace;
-            //    logEntry.ExceptionMessage = $"InnerException: {ex.InnerException} | Message: {ex.Message}";
-            //}
+            if (typeLog is TypeLog.Exception)
+            {
+                logEntry.StackTrace = ex.StackTrace;
+                logEntry.ExceptionMessage = $"InnerException: {ex.InnerException} | Message: {ex.Message}";
+            }
 
-            //await LogRepository.InsertAsync(logEntry);
+            await LogRepository.InsertAsync(logEntry);
         }
     }
 }
