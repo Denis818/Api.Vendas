@@ -1,7 +1,7 @@
-﻿using System.Text.Json.Serialization;
-using System.Text.Json;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 
-namespace Domain.Converters
+namespace Domain.Converters.DatesTimes
 {
     public class TimeFormatConverter : JsonConverter<DateTime>
     {

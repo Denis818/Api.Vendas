@@ -1,9 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.AspNetCore.Mvc;
-using Domain.Enumeradores;
+﻿using Api.Vendas.Controllers.Base;
 using Application.Utilities;
-using ProEventos.API.Controllers.Base;
-
+using Domain.Enumeradores;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 namespace Api.Vendas.Attributes
 {
     [AttributeUsage(AttributeTargets.Class)]
@@ -11,14 +10,14 @@ namespace Api.Vendas.Attributes
     {
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            if (!context.HttpContext.User.Identity.IsAuthenticated)
+            if(!context.HttpContext.User.Identity.IsAuthenticated)
             {
                 var response = new ResponseResultDTO<string>()
                 {
                     Mensagens = [new Notificacao("Acesso não autorizado.")]
                 };
 
-                context.Result = new ObjectResult(response){ StatusCode = 401 };
+                context.Result = new ObjectResult(response) { StatusCode = 401 };
                 return;
             }
         }
@@ -34,14 +33,14 @@ namespace Api.Vendas.Attributes
             var possuiTodasPermissoes = EnumPermissoes.All(permissao =>
             context.HttpContext.User.Claims.Any(claim => claim.Value == permissao));
 
-            if (!possuiTodasPermissoes)
+            if(!possuiTodasPermissoes)
             {
                 var response = new ResponseResultDTO<string>()
                 {
                     Mensagens = [new Notificacao("Você não tem permissão para acessar esse recurso.")]
                 };
 
-                context.Result = new ObjectResult(response){ StatusCode = 401 };
+                context.Result = new ObjectResult(response) { StatusCode = 401 };
                 return;
             }
         }

@@ -1,4 +1,5 @@
 ﻿using Api.Vendas.Attributes;
+using Api.Vendas.Controllers.Base;
 using Api.Vendas.Extensios.Swagger.ExamplesSwagger.Log;
 using Api.Vendas.Utilities;
 using Application.Utilities;
@@ -8,11 +9,9 @@ using Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using ProEventos.API.Controllers.Base;
-using Save.Cache.Memory;
 using Swashbuckle.AspNetCore.Filters;
 
-namespace Api.Vendas.Controllers.Logs
+namespace Api.Vendas.Controllers.LogApp
 {
     [ApiController]
     [AuthorizationVendasWeb]
@@ -29,7 +28,7 @@ namespace Api.Vendas.Controllers.Logs
         {
             var listLog = await Pagination.PaginateResult(_logAcesso.Get(), paginaAtual, itensPorPagina);
 
-            if (listLog.Itens.Count == 0) 
+            if(listLog.Itens.Count == 0)
                 Notificar("Nenhum log encontrado.", EnumTipoNotificacao.Informacao);
 
             return listLog;
@@ -41,7 +40,7 @@ namespace Api.Vendas.Controllers.Logs
         {
             var logAcesso = await _logAcesso.GetByIdAsync(id);
 
-            if (logAcesso is null)
+            if(logAcesso is null)
             {
                 Notificar("Nenhum log encontrado.", EnumTipoNotificacao.Informacao);
                 return new LogVenda();
@@ -54,7 +53,7 @@ namespace Api.Vendas.Controllers.Logs
         [SwaggerResponseExample(StatusCodes.Status200OK, typeof(ListLogVendaExample))]
         public async Task<List<LogVenda>> FilterUserName(string email)
         {
-            if (email.IsNullOrEmpty()) return await _logAcesso.Get().ToListAsync();
+            if(email.IsNullOrEmpty()) return await _logAcesso.Get().ToListAsync();
 
             var lowerName = email.ToLower();
 

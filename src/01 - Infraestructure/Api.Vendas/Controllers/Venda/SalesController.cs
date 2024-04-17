@@ -1,11 +1,11 @@
 ﻿using Api.Vendas.Attributes;
+using Api.Vendas.Controllers.Base;
 using Api.Vendas.Extensios.Swagger.ExamplesSwagger.Venda_;
 using Api.Vendas.Utilities;
 using Application.Interfaces.Services;
 using Domain.Models;
 using Domain.Models.Dto;
 using Microsoft.AspNetCore.Mvc;
-using ProEventos.API.Controllers.Base;
 using Save.Cache.Memory;
 using Swashbuckle.AspNetCore.Filters;
 

@@ -3,7 +3,7 @@ using Application.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace ProEventos.API.Controllers.Base
+namespace Api.Vendas.Controllers.Base
 {
     public abstract class BaseApiController(IServiceProvider service) : Controller
     {
@@ -11,7 +11,7 @@ namespace ProEventos.API.Controllers.Base
 
         public override void OnActionExecuted(ActionExecutedContext context)
         {
-            if (context.Result is not ObjectResult result)
+            if(context.Result is not ObjectResult result)
             {
                 context.Result = CustomResponse<object>(null);
                 return;
@@ -21,10 +21,10 @@ namespace ProEventos.API.Controllers.Base
 
         protected IActionResult CustomResponse<TResponse>(TResponse contentResponse)
         {
-            if (_notificador.ListNotificacoes.Count > 0)
+            if(_notificador.ListNotificacoes.Count > 0)
             {
                 var ListErros = _notificador.ListNotificacoes.Where(item => item.StatusCode == EnumTipoNotificacao.ClientError);
-                if (ListErros.Any())
+                if(ListErros.Any())
                 {
                     return BadRequest(new ResponseResultDTO<TResponse>(default)
                     {
@@ -33,17 +33,18 @@ namespace ProEventos.API.Controllers.Base
                 }
 
                 var listErrosInternos = _notificador.ListNotificacoes.Where(item => item.StatusCode == EnumTipoNotificacao.ServerError);
-                if (listErrosInternos.Any())
+                if(listErrosInternos.Any())
                 {
                     return new ObjectResult(new ResponseResultDTO<TResponse>(contentResponse)
                     {
                         Mensagens = listErrosInternos.ToArray()
 
-                    }) { StatusCode = 500 };
+                    })
+                    { StatusCode = 500 };
                 }
 
                 var listInformacoes = _notificador.ListNotificacoes.Where(item => item.StatusCode == EnumTipoNotificacao.Informacao);
-                if (listInformacoes.Any())
+                if(listInformacoes.Any())
                 {
                     return Ok(new ResponseResultDTO<TResponse>(contentResponse)
                     {
@@ -54,7 +55,7 @@ namespace ProEventos.API.Controllers.Base
 
             return Ok(new ResponseResultDTO<TResponse>(contentResponse)
             {
-                Mensagens = [ new Notificacao("") ]
+                Mensagens = [new Notificacao("")]
             });
         }
 

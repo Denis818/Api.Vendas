@@ -1,5 +1,4 @@
-﻿using Domain.Converters;
-using Domain.Models.Dto;
+﻿using Domain.Converters.DatesTimes;
 using System.Text.Json.Serialization;
 
 namespace Domain.Models
@@ -9,7 +8,7 @@ namespace Domain.Models
         public int Id { get; set; }
         public string UserName { get; set; }
 
-        [JsonConverter(typeof(DateFormatConverter))]
+        [JsonConverter(typeof(TimeFormatConverter))]
         public DateTime DataAcesso { get; set; }
         public string Acao { get; set; }
 

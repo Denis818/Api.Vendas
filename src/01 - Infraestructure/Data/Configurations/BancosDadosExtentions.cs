@@ -1,6 +1,6 @@
 ﻿using Data.DataContext;
 using Data.DataContext.Context;
-using Domain.Converters;
+using Domain.Converters.DatesTimes;
 using Domain.Enumeradores;
 using Domain.Models;
 using Microsoft.AspNetCore.Identity;
@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System.Security.Claims;
 
-namespace Application.Configurations.UserMain
+namespace Data.Configurations
 {
     public static class SeedUser
     {
@@ -19,18 +19,18 @@ namespace Application.Configurations.UserMain
 
             var vendasDbContext = serviceProvider.GetRequiredService<VendasDbContext>();
 
-          //  bool deletado = vendasDbContext.Database.EnsureDeleted();
+            //  bool deletado = vendasDbContext.Database.EnsureDeleted();
 
-            if (!vendasDbContext.Database.CanConnect())
+            if(!vendasDbContext.Database.CanConnect())
             {
                 vendasDbContext.Database.Migrate();
                 SeedVendasDbContext(vendasDbContext);
             }
 
             var logDbContext = serviceProvider.GetRequiredService<LogDbContext>();
-          //  bool dseletado = logDbContext.Database.EnsureDeleted();
+            //  bool dseletado = logDbContext.Database.EnsureDeleted();
 
-            if (!logDbContext.Database.CanConnect())
+            if(!logDbContext.Database.CanConnect())
             {
                 logDbContext.Database.Migrate();
             }
@@ -43,7 +43,7 @@ namespace Application.Configurations.UserMain
             var _userManager = serviceScope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
             var usuarioInicial = _userManager.FindByEmailAsync("denis@gmail.com").GetAwaiter().GetResult();
 
-            if (usuarioInicial is null)
+            if(usuarioInicial is null)
             {
                 IdentityUser user = new()
                 {
@@ -58,7 +58,7 @@ namespace Application.Configurations.UserMain
 
                 IdentityResult result = _userManager.CreateAsync(user, "Denis@123456").Result;
 
-                if (result.Succeeded)
+                if(result.Succeeded)
                 {
                     var listPermissoesPadroesAdmin = new[]
                     {
@@ -76,7 +76,7 @@ namespace Application.Configurations.UserMain
 
         private static void SeedVendasDbContext(VendasDbContext context)
         {
-            if (!context.Vendas.Any())
+            if(!context.Vendas.Any())
             {
                 var random = new Random();
                 var produtos = new List<string>
@@ -88,7 +88,7 @@ namespace Application.Configurations.UserMain
                     "Pé de Moleque", "Cocada", "Alfajor", "Doce de Leite", "Gelatina"
                 };
 
-                for (int i = 0; i < 30; i++)
+                for(int i = 0; i < 30; i++)
                 {
                     var preco = Math.Round(random.NextDouble() * (10 - 1) + 1, 2);
                     var quantidade = random.Next(1, 20);

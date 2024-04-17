@@ -1,6 +1,6 @@
-﻿using Application.Utilities;
+﻿using Api.Vendas.Controllers.Base;
+using Application.Utilities;
 using Domain.Dtos.Vendas;
-using ProEventos.API.Controllers.Base;
 using Swashbuckle.AspNetCore.Filters;
 
 namespace Api.Vendas.Extensios.Swagger.ExamplesSwagger.Dashboard

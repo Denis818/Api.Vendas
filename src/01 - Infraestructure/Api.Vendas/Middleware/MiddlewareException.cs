@@ -1,12 +1,10 @@
-﻿using Application.Interfaces.Services;
+﻿using Api.Vendas.Controllers.Base;
+using Application.Interfaces.Services;
 using Application.Utilities;
-using Domain.Converters;
-using Domain.Interfaces.Repository;
-using Domain.Models;
-using ProEventos.API.Controllers.Base;
+using Domain.Enumeradores;
 using System.Text.Json;
 
-namespace ProEventos.API.Configuration.Middleware
+namespace Api.Vendas.Middleware
 {
     public class MiddlewareException(RequestDelegate next, IWebHostEnvironment environmentHost)
     {
@@ -19,12 +17,14 @@ namespace ProEventos.API.Configuration.Middleware
             {
                 await _next(context);
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
-                await context.RequestServices.GetService<ILogApplicationServices>()
-                                             .RegisterLog(TypeLog.Exception, context, exception: ex);
+                await context
+                    .RequestServices.GetService<ILogAppServices>()
+                    .RegisterLog(EnumTypeLog.Exception, context, exception: ex);
 
-                var message = $"Erro interno no servidor. {(_environmentHost.IsDevelopment() ? ex.Message : "")}";
+                var message =
+                    $"Erro interno no servidor. {(_environmentHost.IsDevelopment() ? ex.Message : "")}";
 
                 var response = new ResponseResultDTO<string>()
                 {

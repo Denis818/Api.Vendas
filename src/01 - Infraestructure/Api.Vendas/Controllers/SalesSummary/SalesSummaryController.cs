@@ -5,10 +5,10 @@ using Application.Interfaces.Services;
 using Domain.Dtos.Vendas;
 using Domain.Models;
 using Microsoft.AspNetCore.Mvc;
-using ProEventos.API.Controllers.Base;
 using Save.Cache.Memory;
 using Swashbuckle.AspNetCore.Filters;
 using Api.Vendas.Extensios.Swagger.ExamplesSwagger.Venda_;
+using Api.Vendas.Controllers.Base;
 
 namespace Api.Vendas.Controllers.Dashboard
 {

@@ -1,5 +1,5 @@
-﻿using Application.Utilities;
-using ProEventos.API.Controllers.Base;
+﻿using Api.Vendas.Controllers.Base;
+using Application.Utilities;
 using Swashbuckle.AspNetCore.Filters;
 
 namespace Api.Vendas.Extensios.Swagger.ExamplesSwagger.Venda_

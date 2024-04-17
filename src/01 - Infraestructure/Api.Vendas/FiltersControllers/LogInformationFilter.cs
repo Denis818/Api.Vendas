@@ -1,20 +1,27 @@
-﻿using Microsoft.AspNetCore.Mvc.Filters;
+﻿using Application.Interfaces.Services;
+using Domain.Enumeradores;
 using Microsoft.AspNetCore.Mvc;
-using Application.Interfaces.Services;
-using Domain.Models;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace Api.Vendas.FiltersControllers
 {
-    public class LogInformationFilter(ILogApplicationServices LogService) : IAsyncResultFilter
+    public class LogInformationFilter(ILogAppServices LogService) : IAsyncResultFilter
     {
-        public async Task OnResultExecutionAsync(ResultExecutingContext context, ResultExecutionDelegate next)
+        public async Task OnResultExecutionAsync(
+            ResultExecutingContext context,
+            ResultExecutionDelegate next
+        )
         {
-            if (context.Result is ObjectResult objectResult)
+            if(context.Result is ObjectResult objectResult)
             {
-                await LogService.RegisterLog(TypeLog.Information, context.HttpContext, objectResult);
+                await LogService.RegisterLog(
+                    EnumTypeLog.Information,
+                    context.HttpContext,
+                    objectResult
+                );
             }
 
             await next();
-        }   
+        }
     }
 }

@@ -4,7 +4,7 @@ using Application.Constants;
 using Application.Interfaces.Services;
 using Application.Services.Base;
 using Application.Utilities;
-using Domain.Converters;
+using Domain.Converters.DatesTimes;
 using Domain.Dtos.Vendas;
 using Domain.Interfaces.Repository;
 using Domain.Models;
@@ -13,7 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Globalization;
 
-namespace Application.Services
+namespace Application.Services.Venda_
 {
     public class VendasServices(IServiceProvider service, ILogVendaServices logVenda) : ServiceAppBase<Venda, VendaDto, IVendaRepository>(service), IVendasServices
     {
@@ -62,7 +62,7 @@ namespace Application.Services
 
         public async Task<List<Venda>> FilterSalesByName(string name)
         {
-            if (name.IsNullOrEmpty()) return await _repository.Get().ToListAsync();
+            if(name.IsNullOrEmpty()) return await _repository.Get().ToListAsync();
 
             var lowerName = name.ToLower();
 
@@ -73,7 +73,7 @@ namespace Application.Services
         public async Task<List<VendasPorDiaDto>> GetGroupSalesDayAsync()
         {
             var allProducts = await _repository.Get().ToListAsync();
-            if (allProducts.Count < 1)
+            if(allProducts.Count < 1)
             {
                 Notificar(EnumTipoNotificacao.Informacao, "Nunhuma venda encontrada.");
                 return null;
@@ -103,7 +103,7 @@ namespace Application.Services
             // Carrega todos os dados necessários em uma única consulta
             var allSales = await _repository.Get().ToListAsync();
 
-            if (allSales.Count < 1)
+            if(allSales.Count < 1)
             {
                 Notificar(EnumTipoNotificacao.Informacao, "Nunhuma venda encontrada.");
                 return null;
@@ -152,7 +152,7 @@ namespace Application.Services
 
         public async Task<Venda> InsertAsync(VendaDto vendaDto)
         {
-            if (Validator(vendaDto)) return null;
+            if(Validator(vendaDto)) return null;
 
             var venda = MapToModel(vendaDto);
 
@@ -162,7 +162,7 @@ namespace Application.Services
 
             await _repository.InsertAsync(venda);
 
-            if (!await _repository.SaveChangesAsync())
+            if(!await _repository.SaveChangesAsync())
             {
                 Notificar(EnumTipoNotificacao.ServerError, ErrorMessages.InsertError);
                 return null;
@@ -175,11 +175,11 @@ namespace Application.Services
 
         public async Task<Venda> UpdateAsync(int id, VendaDto vendaDto)
         {
-            if (Validator(vendaDto)) return null;
+            if(Validator(vendaDto)) return null;
 
             var venda = await _repository.GetByIdAsync(id);
 
-            if (venda == null)
+            if(venda == null)
             {
                 Notificar(EnumTipoNotificacao.ClientError, ErrorMessages.NotFoundById + id);
                 return null;
@@ -200,7 +200,7 @@ namespace Application.Services
 
             _repository.Update(venda);
 
-            if (!await _repository.SaveChangesAsync())
+            if(!await _repository.SaveChangesAsync())
             {
                 Notificar(EnumTipoNotificacao.ServerError, ErrorMessages.UpdateError);
                 return null;
@@ -215,7 +215,7 @@ namespace Application.Services
         {
             var venda = await _repository.GetByIdAsync(id);
 
-            if (venda == null)
+            if(venda == null)
             {
                 Notificar(EnumTipoNotificacao.ClientError, ErrorMessages.NotFoundById + id);
                 return;
@@ -223,7 +223,7 @@ namespace Application.Services
 
             _repository.Delete(venda);
 
-            if (!await _repository.SaveChangesAsync())
+            if(!await _repository.SaveChangesAsync())
             {
                 Notificar(EnumTipoNotificacao.ServerError, ErrorMessages.DeleteError);
                 return;
@@ -238,7 +238,7 @@ namespace Application.Services
         {
             var vendas = _repository.Get(venda => ids.Contains(venda.Id)).ToArray();
 
-            if (vendas.IsNullOrEmpty())
+            if(vendas.IsNullOrEmpty())
             {
                 Notificar(EnumTipoNotificacao.ClientError, ErrorMessages.NotFoundByIds + string.Join(", ", ids));
                 return;
@@ -246,7 +246,7 @@ namespace Application.Services
 
             var idsNaoEncontrados = ids.Except(vendas.Select(evento => evento.Id));
 
-            if (idsNaoEncontrados.Any())
+            if(idsNaoEncontrados.Any())
             {
                 string idsNotFound = $"{string.Join(", ", idsNaoEncontrados)}. Encontrados foram deletados";
 
@@ -255,13 +255,13 @@ namespace Application.Services
 
             _repository.DeleteRange(vendas);
 
-            if (!await _repository.SaveChangesAsync())
+            if(!await _repository.SaveChangesAsync())
             {
                 Notificar(EnumTipoNotificacao.ServerError, ErrorMessages.DeleteError);
                 return;
             }
 
-            foreach (var venda in vendas)
+            foreach(var venda in vendas)
             {
                 await _logVenda.InsertLog(_context.User.Identity.Name, venda, LogMessages.LogDelete);
             }

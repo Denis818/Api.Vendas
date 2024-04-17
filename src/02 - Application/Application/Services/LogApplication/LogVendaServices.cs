@@ -1,9 +1,9 @@
 ﻿using Application.Interfaces.Services;
-using Domain.Converters;
+using Domain.Converters.DatesTimes;
 using Domain.Interfaces.Repository;
 using Domain.Models;
 
-namespace Application.Services.Logs
+namespace Application.Services.LogApplication
 {
     public class LogVendaServices(ILogVendaRepository logAcesso) : ILogVendaServices
     {

@@ -2,9 +2,9 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace Domain.Converters
+namespace Domain.Converters.DatesTimes
 {
-    public class DateFormatConverter : JsonConverter<DateTime>
+    public class LongDateFormatConverter : JsonConverter<DateTime>
     {
         public override DateTime Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
@@ -13,7 +13,8 @@ namespace Domain.Converters
 
         public override void Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options)
         {
-            writer.WriteStringValue(value.ToString("g", new CultureInfo("pt-BR")));
+            // Use o formato longo de data com cultura pt-BR ao escrever a data de volta ao JSON.
+            writer.WriteStringValue(value.ToString("D", new CultureInfo("pt-BR")));
         }
     }
 }

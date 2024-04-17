@@ -1,4 +1,5 @@
 ﻿using Api.Vendas.Attributes;
+using Api.Vendas.Controllers.Base;
 using Api.Vendas.Extensios.Swagger.ExamplesSwagger.User;
 using Application.Interfaces.Services;
 using Application.Utilities;
@@ -7,7 +8,6 @@ using Domain.Enumeradores;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using ProEventos.API.Controllers.Base;
 using Swashbuckle.AspNetCore.Filters;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;

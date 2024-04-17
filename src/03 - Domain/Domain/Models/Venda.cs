@@ -1,4 +1,4 @@
-﻿using Domain.Converters;
+﻿using Domain.Converters.DatesTimes;
 using System.Text.Json.Serialization;
 
 namespace Domain.Models
@@ -9,7 +9,7 @@ namespace Domain.Models
         public string Nome { get; set; }
         public double Preco { get; set; }
 
-        [JsonConverter(typeof(DateFormatConverter))]
+        [JsonConverter(typeof(TimeFormatConverter))]
         public DateTime DataVenda { get; set; }
         public int QuantidadeVendido { get; set; }
         public double TotalDaVenda { get; set; }

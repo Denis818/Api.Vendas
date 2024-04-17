@@ -1,7 +1,7 @@
-﻿using Api.Vendas.Utilities;
+﻿using Api.Vendas.Controllers.Base;
+using Api.Vendas.Utilities;
 using Application.Utilities;
 using Domain.Models;
-using ProEventos.API.Controllers.Base;
 using Swashbuckle.AspNetCore.Filters;
 
 namespace Api.Vendas.Extensios.Swagger.ExamplesSwagger.Log

@@ -1,10 +1,10 @@
 ﻿using Api.Vendas.Extensios.Swagger;
 using Api.Vendas.FiltersControllers;
+using Api.Vendas.Middleware;
 using Application.Configurations.Extensions.DependencyManagers;
-using Application.Configurations.UserMain;
+using Data.Configurations;
 using Data.Configurations.Extensions;
 using Microsoft.AspNetCore.Localization;
-using ProEventos.API.Configuration.Middleware;
 using System.Globalization;
 
 namespace Api.Vendas
